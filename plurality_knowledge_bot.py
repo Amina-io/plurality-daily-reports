@@ -16,144 +16,230 @@ import time
 from datetime import datetime
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
-# Store your API key securely
 API_KEY = os.environ.get("PERPLEXITY_API_KEY")
 if not API_KEY:
     raise ValueError("Please set the PERPLEXITY_API_KEY environment variable")
 
-# Define the categories and keywords
+# Define keyword groups to manage API requests better
+PEOPLE_KEYWORDS = [
+    "Alessandra Casella", "Allison Duettmann", "Allison Stanger", "Audrey Tang",
+    "Aviv Ovadya", "Beth Noveck", "Bill Doherty", "Bruce Schneier", "CL Kao",
+    "Charlotte Cavaillé", "Colin Megill", "Cory Doctorow", "Danielle Allen",
+    "Daron Acemoglu", "David Bloomin", "Deb Roy", "Deepti Doshi", "Dimitrios Xefteris",
+    "Divya Siddarth", "Edward Casternova", "Eli Pariser", "Eric A. Posner",
+    "Eugene Leventhal", "Evan Miyazono", "Glen Weyl", "Helen Nissenbaum",
+    "James Evans", "Jamie Joyce", "Jeffrey Fossett", "John Etchemendy",
+    "Jon X. Eguia", "Joshua Tan", "Juan Benet", "Kevin Owocki", "Lisa Schirch",
+    "Madeleine Daepp", "Mahnaz Roshanaei", "Manon Revel", "Margaret Levi",
+    "Matthew Prewitt", "Mike Jordan", "Nathan Schneider", "Nicole Immorlica",
+    "Percy Liang", "Primavera De Filippi", "Puja Ohlhaver", "Rob Reich",
+    "Rose Bloomin", "Saffron Huang", "Shrey Jain", "Stefaan Verhulst",
+    "Uma Viswanathan", "Uri Wilensky", "Victor Lange", "Vitalik Buterin",
+    "Wes Chao", "Zoë Hitzig", "danah boyd"
+]
+
+ORGANIZATION_KEYWORDS = [
+    "Plurality Institute", "Berkman Klein Center for Internet & Society",
+    "Harvard Democracy Renovation Lab", "MIT Media Lab",
+    "Stanford Center for AI Governance and Policy", "Y Combinator Research",
+    "OpenAI", "Anthropic", "Meta Government", "Civic Tech Field Guide",
+    "New Public", "Public Interest Tech", "Tech for Good", "All Tech is Human",
+    "RadicalX", "AI and Democracy Foundation", 
+    "Microsoft Plural Technology Collaboratory", 
+    "University of California, Berkeley CHAI", "Gitcoin",
+    "Tech Policy Press"
+]
+
+CONCEPT_KEYWORDS = [
+    "collective intelligence", "digital democracy", "collaborative governance",
+    "distributed systems", "decentralized autonomous organizations", "plurality",
+    "digital commons", "pluralism", "tech ethics", "tech policy", 
+    "AI ethics", "AI governance", "AI policy", "AI regulation",
+    "decentralized governance"
+]
+
+# Define the categories with their keyword groups
 PLURALITY_CATEGORIES = {
     "research_papers": {
         "description": "Recent academic papers and publications",
-        "keywords": [
-            "collective intelligence", 
-            "digital democracy",
-            "collaborative governance",
-            "distributed systems",
-            "decentralized autonomous organizations",
-            "plurality",
-            "digital commons"
-        ]
+        "keyword_groups": {
+            "concepts": CONCEPT_KEYWORDS,
+            "people": PEOPLE_KEYWORDS,
+            "organizations": ORGANIZATION_KEYWORDS
+        }
     },
     "industry_news": {
         "description": "Latest news and developments",
-        "keywords": [
-            "plurality project",
-            "digital democracy",
-            "collective intelligence platforms",
-            "decentralized governance",
-            "tech policy",
-            "digital commons"
-        ]
+        "keyword_groups": {
+            "concepts": CONCEPT_KEYWORDS,
+            "people": PEOPLE_KEYWORDS,
+            "organizations": ORGANIZATION_KEYWORDS
+        }
     },
     "events": {
-        "description": "Upcoming conferences, workshops, and meetups",
-        "keywords": [
-            "plurality conference",
-            "digital democracy workshop",
-            "collective intelligence symposium",
-            "governance innovation",
-            "tech ethics"
-        ]
+        "description": "Upcoming conferences, events, workshops, talks, virtual events, panels, panel discussions, and meetups",
+        "keyword_groups": {
+            "events": [
+                "plurality conference", "digital democracy workshop",
+                "collective intelligence symposium", "governance innovation",
+                "tech ethics", "tech policy", "tech policy press",
+                "tech policy conference", "tech policy workshop",
+                "tech policy symposium", "tech policy panel",
+                "tech policy panel discussion", "tech policy meetup",
+                "AI ethics talk", "AI ethics symposium"
+            ]
+        }
     },
     "jobs": {
-        "description": "Job opportunities and positions",
-        "keywords": [
-            "plurality researcher",
-            "digital democracy",
-            "collective intelligence",
-            "tech ethics researcher",
-            "governance innovation"
-        ]
+        "description": "Job opportunities, fellowships, grants, research funding and positions",
+        "keyword_groups": {
+            "jobs": [
+                "plurality researcher", "digital democracy",
+                "collective intelligence", "tech ethics researcher",
+                "governance innovation", "All Tech is Human", "tech policy",
+                "Tech For Good", "AI Safety", "AI Ethics", "AI Governance",
+                "AI Policy", "AI Regulation", "Gitcoin Grants", "RadicalX",
+                "New_ public"
+            ]
+        }
     }
 }
 
-def get_plurality_updates(category_name, category_info):
+def get_plurality_updates_for_group(category_name, group_name, keywords):
     """
-    Fetches latest updates about given keywords in the specified category using Perplexity API.
+    Fetches latest updates for a specific keyword group using Perplexity API.
     
     Args:
         category_name (str): Name of the category
-        category_info (dict): Dictionary with category description and keywords
+        group_name (str): Name of the keyword group
+        keywords (list): List of keywords to search for
         
     Returns:
         dict: Structured information about the latest updates
     """
     url = "https://api.perplexity.ai/chat/completions"
     
-    keywords_str = ", ".join(category_info["keywords"])
+    # Limit the number of keywords per request to avoid token limits
+    # Split into chunks of max 15 keywords
+    MAX_KEYWORDS_PER_REQUEST = 15
+    keyword_chunks = [keywords[i:i + MAX_KEYWORDS_PER_REQUEST] 
+                     for i in range(0, len(keywords), MAX_KEYWORDS_PER_REQUEST)]
     
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
+    all_items = []
     
-    prompt = f"""You are a research assistant for Plurality Institute.
-    Provide the latest {category_name.replace('_', ' ')} related to the following keywords from the past 48 hours:
-    {keywords_str}
-    
-    Include titles, dates, brief descriptions, links, and sources.
-    Format your response as a JSON object with the following structure:
-    {{
-      "items": [
+    for chunk in keyword_chunks:
+        keywords_str = ", ".join(chunk)
+        
+        headers = {
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json"
+        }
+        
+        category_description = PLURALITY_CATEGORIES[category_name]["description"]
+        
+        prompt = f"""You are a research assistant for Plurality Institute.
+        Find {category_description} related to the following keywords from the past 48 hours:
+        {keywords_str}
+        
+        Include titles, dates, brief descriptions, links, and sources.
+        Format your response as a JSON object with the following structure:
         {{
-          "title": "Item title",
-          "date": "Publication date if available",
-          "description": "Brief description (50 words max)",
-          "link": "URL if available",
-          "source": "Source name"
+          "items": [
+            {{
+              "title": "Item title",
+              "date": "Publication date if available",
+              "description": "Brief description (50 words max)",
+              "link": "URL if available",
+              "source": "Source name"
+            }}
+          ]
         }}
-      ]
-    }}
-    
-    Only include highly relevant and recent items. Prioritize reputable sources.
-    If you find fewer than 3 items, expand your search to the past week.
-    Include information from academic journals, news sites, conference websites, job boards, and social media as appropriate.
-    """
-    
-    data = {
-        "model": "sonar-pro",  # Using Perplexity's most capable model
-        "messages": [
-            {
-                "role": "system",
-                "content": "You are a specialized research assistant for Plurality Institute, focused on finding and summarizing the latest relevant information."
-            },
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        "max_tokens": 1500,
-        "temperature": 0.2  # Lower temperature for more factual responses
-    }
-    
-    try:
-        response = requests.post(url, headers=headers, json=data)
-        response.raise_for_status()
         
-        result = response.json()
-        content = result["choices"][0]["message"]["content"]
+        Only include highly relevant and recent items. Prioritize reputable sources.
+        If you find fewer than 2 items, expand your search to the past 3 weeks.
+        Include information from academic journals, news sites, conference websites, job boards, and social media as appropriate. Do not include information for events that have already occurred.
+        """
         
-        # Parse the JSON response
+        data = {
+            "model": "sonar-pro",  # Using Perplexity's most capable model
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "You are a specialized research assistant for Plurality Institute, focused on finding and summarizing the latest relevant information."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            "max_tokens": 1500,
+            "temperature": 0.2  # Lower temperature for more factual responses
+        }
+        
         try:
-            return json.loads(content)
-        except json.JSONDecodeError:
-            print(f"Error parsing JSON response for {category_name}. Raw response:")
-            print(content)
-            return {"items": []}
+            print(f"  Making API request for {category_name}/{group_name} (chunk of {len(chunk)} keywords)...")
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()
             
-    except requests.exceptions.RequestException as e:
-        print(f"Error making API request for {category_name}: {str(e)}")
-        return {"items": []}
-    except (KeyError, IndexError) as e:
-        print(f"Error parsing API response for {category_name}: {str(e)}")
-        return {"items": []}
-    except Exception as e:
-        print(f"Unexpected error for {category_name}: {str(e)}")
-        return {"items": []}
+            result = response.json()
+            content = result["choices"][0]["message"]["content"]
+            
+            # Parse the JSON response
+            try:
+                chunk_results = json.loads(content)
+                if "items" in chunk_results and chunk_results["items"]:
+                    all_items.extend(chunk_results["items"])
+                    print(f"  Found {len(chunk_results['items'])} items for this chunk")
+            except json.JSONDecodeError:
+                print(f"  Error parsing JSON response for {category_name}/{group_name}. Raw response:")
+                print(content[:200] + "..." if len(content) > 200 else content)
+                
+        except requests.exceptions.RequestException as e:
+            print(f"  Error making API request for {category_name}/{group_name}: {str(e)}")
+        except (KeyError, IndexError) as e:
+            print(f"  Error parsing API response for {category_name}/{group_name}: {str(e)}")
+        except Exception as e:
+            print(f"  Unexpected error for {category_name}/{group_name}: {str(e)}")
+        
+        # Add a delay between API calls to avoid rate limiting
+        time.sleep(2)
+    
+    return {"items": all_items}
+
+def get_plurality_updates(category_name, category_info):
+    """
+    Fetches latest updates for all keyword groups in a category, combining results.
+    
+    Args:
+        category_name (str): Name of the category
+        category_info (dict): Dictionary with category description and keyword groups
+        
+    Returns:
+        dict: Combined results from all keyword groups
+    """
+    print(f"Processing category: {category_name}...")
+    all_items = []
+    
+    # Process each keyword group separately
+    for group_name, keywords in category_info["keyword_groups"].items():
+        group_results = get_plurality_updates_for_group(category_name, group_name, keywords)
+        if "items" in group_results:
+            all_items.extend(group_results["items"])
+    
+    # Remove duplicate items based on title
+    unique_items = []
+    seen_titles = set()
+    
+    for item in all_items:
+        title = item.get("title", "").strip()
+        if title and title not in seen_titles:
+            seen_titles.add(title)
+            unique_items.append(item)
+    
+    print(f"Found {len(unique_items)} unique items for {category_name}")
+    return {"items": unique_items}
 
 def generate_html_report(results):
     """
@@ -318,11 +404,9 @@ def main():
     
     results = {}
     
-    # Process each category with a slight delay to avoid API rate limits
+    # Process each category
     for category_name, category_info in PLURALITY_CATEGORIES.items():
-        print(f"Processing category: {category_name}...")
         results[category_name] = get_plurality_updates(category_name, category_info)
-        time.sleep(2)  # Small delay between API calls
     
     # Generate and save the HTML report
     html_report = generate_html_report(results)
