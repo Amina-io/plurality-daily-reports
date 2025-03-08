@@ -139,35 +139,36 @@ def get_plurality_updates_for_group(category_name, group_name, keywords):
         
         category_description = PLURALITY_CATEGORIES[category_name]["description"]
         
-        prompt = f"""You are a research assistant for Plurality Institute.
+        prompt = f"""You are a content curator for Plurality Institute. That sources jobs, events, research papers, media and other information. 
         Find {category_description} related to the following keywords from the past 48 hours:
         {keywords_str}
-        
+
         Include titles, dates, brief descriptions, links, and sources.
-        Format your response as a JSON object with the following structure:
-        {{
-          "items": [
-            {{
-              "title": "Item title",
-              "date": "Publication date if available",
-              "description": "Brief description (50 words max)",
-              "link": "URL if available",
-              "source": "Source name"
-            }}
-          ]
-        }}
-        
-        Only include highly relevant and recent items. Prioritize reputable sources.
-        If you find fewer than 2 items, expand your search to the past 3 weeks.
-        Include information from academic journals, news sites, conference websites, job boards, and social media as appropriate. Do not include information for events that have already occurred.
-        """
+         Format your response as a JSON object with the following structure:
+{{
+  "items": [
+    {{
+      "title": "Item title",
+      "date": "Publication date if available",
+      "description": "Brief description (50 words max)",
+      "link": "URL if available",
+      "source": "Source name"
+    }}
+  ]
+}}
+
+Only include highly relevant and recent items. Prioritize reputable sources.
+Do NOT include any content from plurality.institute or the Plurality Institute's own website.
+If you find fewer than 2 items, expand your search to the past 3 weeks.
+Include information from academic journals, podcasts, relevant substack blogs, LinkedIn, news sites, X.com, Bsky, conference websites, job boards, and social media as appropriate. Do not include information for events that have already occurred or opportunities that have already ended.
+"""
         
         data = {
             "model": "sonar-pro",  # Using Perplexity's most capable model
             "messages": [
                 {
                     "role": "system",
-                    "content": "You are a specialized research assistant for Plurality Institute, focused on finding and summarizing the latest relevant information."
+                    "content": "You are a specialized research assistant and content curator for Plurality Institute, focused on finding and summarizing the latest relevant information."
                 },
                 {
                     "role": "user",
