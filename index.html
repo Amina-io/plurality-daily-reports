@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plurality Knowledge Reports</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .redirect-message {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        #latest-report {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        #reports-list {
+            margin-top: 30px;
+        }
+        #reports-list h2 {
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        #reports-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #reports-list li {
+            margin-bottom: 8px;
+        }
+        #reports-list a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        #reports-list a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Plurality Knowledge Reports</h1>
+    
+    <div class="redirect-message">
+        <p>Redirecting to the latest report in <span id="countdown">3</span> seconds...</p>
+    </div>
+    
+    <a id="latest-report" href="#">View Latest Report</a>
+    
+    <div id="reports-list">
+        <h2>All Reports</h2>
+        <ul id="reports-ul">
+            <li>Loading reports...</li>
+        </ul>
+    </div>
+
+    <script>
+        // Function to get today's date in YYYY-MM-DD format
+        function getTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Default to today's report
+        let latestReportPath = `output/plurality_report_${getTodayDate()}.html`;
+        
+        // Start with latest date link
+        document.getElementById('latest-report').href = latestReportPath;
+        
+        // Fetch and display all reports that exist
+        async function listReports() {
+            try {
+                const reports = [];
+                const today = new Date();
+                let foundLatest = false;
+                
+                // Try reports for the last 30 days, but check if they exist
+                for (let i = 0; i < 30; i++) {
+                    const date = new Date(today);
+                    date.setDate(today.getDate() - i);
+                    
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const dateStr = `${year}-${month}-${day}`;
+                    const reportPath = `output/plurality_report_${dateStr}.html`;
+                    
+                    // Check if file exists
+                    try {
+                        const response = await fetch(reportPath, { method: 'HEAD' });
+                        if (response.ok) {
+                            reports.push({
+                                date: dateStr,
+                                path: reportPath
+                            });
+                            
+                            // If this is the first report found, make it the latest
+                            if (!foundLatest) {
+                                foundLatest = true;
+                                latestReportPath = reportPath;
+                                document.getElementById('latest-report').href = latestReportPath;
+                            }
+                        }
+                    } catch (error) {
+                        // File doesn't exist, skip
+                        continue;
+                    }
+                }
+                
+                // Update the list
+                const reportsUl = document.getElementById('reports-ul');
+                
+                if (reports.length === 0) {
+                    reportsUl.innerHTML = '<li>No reports found yet. Check back soon!</li>';
+                    document.querySelector('.redirect-message').style.display = 'none';
+                } else {
+                    reportsUl.innerHTML = '';
+                    reports.forEach(report => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = report.path;
+                        a.textContent = `Report for ${report.date}`;
+                        li.appendChild(a);
+                        reportsUl.appendChild(li);
+                    });
+                    
+                    // Start countdown for redirect
+                    let countdown = 3;
+                    const countdownElement = document.getElementById('countdown');
+                    const countdownInterval = setInterval(() => {
+                        countdown--;
+                        countdownElement.textContent = countdown;
+                        if (countdown <= 0) {
+                            clearInterval(countdownInterval);
+                            window.location.href = latestReportPath;
+                        }
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('Error listing reports:', error);
+                document.getElementById('reports-ul').innerHTML = '<li>Error loading reports</li>';
+                document.querySelector('.redirect-message').style.display = 'none';
+            }
+        }
+        
+        // Load the reports list
+        listReports();
+    </script>
+</body>
+</html>
