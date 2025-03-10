@@ -139,17 +139,25 @@ def get_plurality_updates_for_group(category_name, group_name, keywords):
         
         category_description = PLURALITY_CATEGORIES[category_name]["description"]
         
-        prompt = f"""You are a content curator for Plurality Institute. That sources jobs, events, research papers, media and other information. 
-        Find {category_description} related to the following keywords from the past 48 hours:
+        # Updated prompt with stronger emphasis on recency
+        prompt = f"""You are a content curator for Plurality Institute that sources jobs, events, research papers, media and other information.
+        Find {category_description} related to the following keywords:
         {keywords_str}
 
-        Include titles, dates, brief descriptions, links, and sources.
-         Format your response as a JSON object with the following structure:
+        IMPORTANT REQUIREMENTS:
+        1. Content MUST be from the LAST 30 DAYS ONLY. This is a strict requirement.
+        2. Include titles, dates, brief descriptions, links, and sources.
+        3. Do NOT include any content older than 30 days.
+        4. For events, only include UPCOMING events (not past events).
+        5. For job opportunities, only include ACTIVE listings (not expired).
+        6. Date format should be YYYY-MM-DD when available.
+
+        Format your response as a JSON object with the following structure:
 {{
   "items": [
     {{
       "title": "Item title",
-      "date": "Publication date if available",
+      "date": "Publication date (YYYY-MM-DD format)",
       "description": "Brief description (50 words max)",
       "link": "URL if available",
       "source": "Source name"
@@ -157,10 +165,10 @@ def get_plurality_updates_for_group(category_name, group_name, keywords):
   ]
 }}
 
-Only include highly relevant and recent items. Prioritize reputable sources.
+Only include highly relevant and current items from the past 30 days. Prioritize reputable sources.
 Do NOT include any content from plurality.institute or the Plurality Institute's own website.
-If you find fewer than 2 items, expand your search to the past 3 weeks.
-Include information from academic journals, podcasts, relevant substack blogs, LinkedIn, news sites, X.com, Bsky, conference websites, job boards, and social media as appropriate. Do not include information for events that have already occurred or opportunities that have already ended.
+If you find fewer than 2 items, you may include the most recent relevant items even if slightly older, but clearly mark the date.
+Include information from academic journals, podcasts, relevant substack blogs, LinkedIn, news sites, X.com, Bsky, conference websites, job boards, and social media as appropriate.
 """
         
         data = {
@@ -168,7 +176,7 @@ Include information from academic journals, podcasts, relevant substack blogs, L
             "messages": [
                 {
                     "role": "system",
-                    "content": "You are a specialized research assistant and content curator for Plurality Institute, focused on finding and summarizing the latest relevant information."
+                    "content": "You are a specialized research assistant and content curator for Plurality Institute, focused on finding and summarizing the latest relevant information from the past 30 days only."
                 },
                 {
                     "role": "user",
