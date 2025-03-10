@@ -307,94 +307,145 @@ def generate_html_report(results):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plurality Daily Knowledge Report - {today}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {{
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
+        :root {{
+            --primary-color: #7050b0;
+            --primary-light: #9070d0;
+            --primary-dark: #5a3a9a;
+            --secondary-color: #aa90f0;
+            --text-color: #333;
+            --text-light: #7f8c8d;
+            --bg-color: #f9f9f9;
+            --card-color: white;
+            --checked-color: #d4edda;
+            --border-radius: 8px;
+            --transition-speed: 0.3s;
+        }}
+        
+        * {{
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+        }}
+        
+        body {{
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
             display: flex;
             min-height: 100vh;
         }}
         
         .sidebar {{
             width: 250px;
-            background-color: #9070d0;
+            background-color: var(--primary-light);
             color: white;
             padding: 20px;
             position: sticky;
             top: 0;
             height: 100vh;
             overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            transition: all var(--transition-speed);
         }}
         
         .sidebar h2 {{
+            font-family: 'Poppins', sans-serif;
             color: white;
-            border-bottom: 1px solid white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             padding-bottom: 10px;
             margin-top: 0;
+            font-weight: 600;
         }}
         
         .sidebar ul {{
             list-style: none;
             padding: 0;
+            margin-top: 15px;
         }}
         
         .sidebar li {{
             margin-bottom: 8px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: transform var(--transition-speed);
+        }}
+        
+        .sidebar li:hover {{
+            transform: translateX(5px);
         }}
         
         .sidebar a {{
             color: #ecf0f1;
             text-decoration: none;
             display: block;
-            padding: 5px;
-            border-radius: 4px;
+            padding: 8px 10px;
+            border-radius: var(--border-radius);
+            transition: background-color var(--transition-speed);
         }}
         
         .sidebar a:hover {{
-            background-color: #7050b0;
+            background-color: var(--primary-dark);
         }}
         
         .sidebar a.active {{
-            background-color: #7050b0;
-            font-weight: bold;
+            background-color: var(--primary-dark);
+            font-weight: 500;
         }}
         
         .content {{
             flex: 1;
-            padding: 20px;
+            padding: 30px;
             max-width: 1000px;
             margin: 0 auto;
         }}
         
         h1 {{
-            color: #aa90f0;
-            border-bottom: 2px solid #aa90f0;
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-light);
             padding-bottom: 10px;
             margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 600;
         }}
         
         h2 {{
-            color: #aa90f0; ;
-            border-left: 4px solid #aa90f0;
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-light);
             padding-left: 10px;
-            margin-top: 25px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 500;
         }}
         
         .item {{
             background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 15px;
-            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }}
+        
+        .item:hover {{
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }}
         
         .item h3 {{
-            color: #aa90f0;
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
             margin-top: 0;
+            margin-bottom: 8px;
+            font-weight: 500;
         }}
         
         .item p {{
@@ -402,50 +453,85 @@ def generate_html_report(results):
         }}
         
         .date {{
-            color: #7f8c8d;
+            color: var(--text-light);
             font-size: 0.9em;
+            margin-bottom: 8px;
         }}
         
         .source {{
-            color: #7f8c8d;
+            color: var(--text-light);
             font-size: 0.9em;
             text-align: right;
+            margin-top: 10px;
         }}
         
         .description {{
             margin: 10px 0;
+            line-height: 1.6;
         }}
         
         a {{
-            color: #aa90f0; 
+            color: var(--primary-color);
             text-decoration: none;
+            transition: color var(--transition-speed);
         }}
         
         a:hover {{
+            color: var(--primary-dark);
             text-decoration: underline;
         }}
         
         .report-date {{
             text-align: right;
-            color: #7f8c8d;
+            color: var(--text-light);
             font-size: 0.9em;
             margin-top: 10px;
+            margin-bottom: 20px;
         }}
         
         .category-description {{
             font-style: italic;
             color: #555;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }}
         
         .no-items {{
             font-style: italic;
-            color: #7f8c8d;
-            padding: 10px;
+            color: var(--text-light);
+            padding: 15px;
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }}
+        
+        /* Checkbox styling */
+        .item-checkbox {{
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: text-top;
+        }}
+        
+        .item-checkbox input[type="checkbox"] {{
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }}
+        
+        .item.checked {{
+            background-color: var(--checked-color);
+        }}
+        
+        .item-header {{
+            display: flex;
+            align-items: flex-start;
+        }}
+        
+        .item-header h3 {{
+            flex: 1;
         }}
         
         /* Responsive adjustments */
-        @media (max-width: 768px) {{
+        @media (max-width: 900px) {{
             body {{
                 flex-direction: column;
             }}
@@ -454,35 +540,100 @@ def generate_html_report(results):
                 width: 100%;
                 height: auto;
                 position: relative;
+                margin-bottom: 20px;
+            }}
+            
+            .sidebar ul {{
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }}
+            
+            .sidebar li {{
+                margin-bottom: 0;
             }}
             
             .content {{
+                padding: 20px;
+            }}
+        }}
+        
+        @media (max-width: 600px) {{
+            .content {{
+                padding: 15px;
+            }}
+            
+            .item {{
                 padding: 15px;
             }}
         }}
     </style>
+    <script>
+        // Function to load checkbox states from localStorage
+        function loadCheckboxStates() {{
+            const checkboxes = document.querySelectorAll('.item-checkbox input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {{
+                const itemId = checkbox.getAttribute('data-id');
+                const isChecked = localStorage.getItem(itemId) === 'true';
+                checkbox.checked = isChecked;
+                
+                // Apply checked styling
+                if (isChecked) {{
+                    checkbox.closest('.item').classList.add('checked');
+                }}
+            }});
+        }}
+        
+        // Function to save checkbox state to localStorage
+        function saveCheckboxState(event) {{
+            const checkbox = event.target;
+            const itemId = checkbox.getAttribute('data-id');
+            localStorage.setItem(itemId, checkbox.checked);
+            
+            // Apply or remove checked styling
+            const item = checkbox.closest('.item');
+            if (checkbox.checked) {{
+                item.classList.add('checked');
+            }} else {{
+                item.classList.remove('checked');
+            }}
+        }}
+        
+        // Initialize when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {{
+            loadCheckboxStates();
+            
+            // Add event listeners to all checkboxes
+            const checkboxes = document.querySelectorAll('.item-checkbox input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {{
+                checkbox.addEventListener('change', saveCheckboxState);
+            }});
+        }});
+    </script>
 </head>
 <body>
     <div class="sidebar">
-        <h2>Report Logs</h2>
+        <h2>Plurality Reports</h2>
         <ul>
             <li><a href="plurality_report_{today}.html" class="active">Today ({today})</a></li>
 """
     
     # Add links to previous reports
     for date, filename in previous_reports:
-        html += f'            <li><a href="{filename}">{date}</a></li>\n'
+        if date != today:  # Don't duplicate today's report
+            html += f'            <li><a href="{filename}">{date}</a></li>\n'
     
     html += """
         </ul>
     </div>
     
     <div class="content">
-        <h1>Plurality Institute Content Sourcing</h1>
+        <h1>Plurality Institute Daily Content Curator</h1>
         <p class="report-date">Generated on: """ + today + """</p>
 """
     
     # Add each category to the HTML
+    item_counter = 0
     for category_name, category_data in results.items():
         category_title = category_name.replace('_', ' ').title()
         category_description = PLURALITY_CATEGORIES[category_name]["description"]
@@ -497,6 +648,9 @@ def generate_html_report(results):
             continue
             
         for item in category_data["items"]:
+            item_counter += 1
+            item_id = f"item-{category_name}-{item_counter}"
+            
             title = item.get("title", "Untitled")
             date = item.get("date", "")
             description = item.get("description", "")
@@ -504,8 +658,13 @@ def generate_html_report(results):
             source = item.get("source", "")
             
             html += f"""
-        <div class="item">
-            <h3>{"<a href='" + link + "' target='_blank'>" if link else ""}{title}{"</a>" if link else ""}</h3>
+        <div class="item" id="{item_id}">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="{item_id}">
+                </div>
+                <h3>{"<a href='" + link + "' target='_blank'>" if link else ""}{title}{"</a>" if link else ""}</h3>
+            </div>
             {f'<p class="date">{date}</p>' if date else ''}
             <p class="description">{description}</p>
             {f'<p class="source">Source: {source}</p>' if source else ''}
