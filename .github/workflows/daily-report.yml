@@ -30,10 +30,19 @@ jobs:
         run: python plurality_knowledge_bot.py
         env:
           PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
-      
+
       - name: Commit and push if changed
         run: |
-          git config --global user.name 'GitHub Actions Bot'
-          git config --global user.email 'actions@github.com'
-          git add output/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update daily knowledge report for $(date +'%Y-%m-%d')" && git push)
+            git config --global user.name 'GitHub Actions Bot'
+            git config --global user.email 'actions@github.com'
+            git add output/
+            # Check if there are changes to commit
+            if [ -n "$(git status --porcelain)" ]; then
+              # Pull with rebase strategy to integrate remote changes
+              git pull --rebase origin master
+              git commit -m "Update daily knowledge report for $(date +'%Y-%m-%d')"
+              git push
+            else
+              echo "No changes to commit"
+            fi
+    
