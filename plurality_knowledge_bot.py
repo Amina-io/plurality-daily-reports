@@ -13,7 +13,8 @@ import requests
 import json
 import os
 import time
-from datetime import datetime
+import re
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -38,6 +39,12 @@ PEOPLE_KEYWORDS = [
     "Rose Bloomin", "Saffron Huang", "Shrey Jain", "Stefaan Verhulst",
     "Uma Viswanathan", "Uri Wilensky", "Victor Lange", "Vitalik Buterin",
     "Wes Chao", "Zoë Hitzig", "danah boyd"
+]
+
+# Define key people for "Our People" section (to be implemented later)
+KEY_PEOPLE = [
+    "Glen Weyl", "Divya Siddarth", "Audrey Tang", "Joshua Tan", 
+    "Matt Prewitt", "E. Glen Weyl", "Puja Ohlhaver"
 ]
 
 ORGANIZATION_KEYWORDS = [
@@ -139,25 +146,17 @@ def get_plurality_updates_for_group(category_name, group_name, keywords):
         
         category_description = PLURALITY_CATEGORIES[category_name]["description"]
         
-        # Updated prompt with stronger emphasis on recency
         prompt = f"""You are a content curator for Plurality Institute that sources jobs, events, research papers, media and other information.
         Find {category_description} related to the following keywords:
         {keywords_str}
 
-        IMPORTANT REQUIREMENTS:
-        1. Content MUST be from the LAST 30 DAYS ONLY. This is a strict requirement.
-        2. Include titles, dates, brief descriptions, links, and sources.
-        3. Do NOT include any content older than 30 days.
-        4. For events, only include UPCOMING events (not past events).
-        5. For job opportunities, only include ACTIVE listings (not expired).
-        6. Date format should be YYYY-MM-DD when available.
-
-        Format your response as a JSON object with the following structure:
+        Include titles, dates, brief descriptions, links, and sources.
+         Format your response as a JSON object with the following structure:
 {{
   "items": [
     {{
       "title": "Item title",
-      "date": "Publication date (YYYY-MM-DD format)",
+      "date": "Publication date if available",
       "description": "Brief description (50 words max)",
       "link": "URL if available",
       "source": "Source name"
@@ -165,10 +164,10 @@ def get_plurality_updates_for_group(category_name, group_name, keywords):
   ]
 }}
 
-Only include highly relevant and current items from the past 30 days. Prioritize reputable sources.
+Only include highly relevant and recent items. Prioritize reputable sources.
 Do NOT include any content from plurality.institute or the Plurality Institute's own website.
-If you find fewer than 2 items, you may include the most recent relevant items even if slightly older, but clearly mark the date.
-Include information from academic journals, podcasts, relevant substack blogs, LinkedIn, news sites, X.com, Bsky, conference websites, job boards, and social media as appropriate.
+If you find fewer than 2 items, expand your search to the past 3 weeks.
+Include information from academic journals, podcasts, relevant substack blogs, LinkedIn, news sites, X.com, Bsky, conference websites, job boards, Luma(an event website) and social media as appropriate. Do not include information for events that have already occurred or opportunities that have already ended.
 """
         
         data = {
@@ -176,7 +175,7 @@ Include information from academic journals, podcasts, relevant substack blogs, L
             "messages": [
                 {
                     "role": "system",
-                    "content": "You are a specialized research assistant and content curator for Plurality Institute, focused on finding and summarizing the latest relevant information from the past 30 days only."
+                    "content": "You are a specialized research assistant and content curator for Plurality Institute, focused on finding and summarizing the latest relevant information."
                 },
                 {
                     "role": "user",
@@ -217,6 +216,7 @@ Include information from academic journals, podcasts, relevant substack blogs, L
     
     return {"items": all_items}
 
+
 def get_plurality_updates(category_name, category_info):
     """
     Fetches latest updates for all keyword groups in a category, combining results.
@@ -250,9 +250,43 @@ def get_plurality_updates(category_name, category_info):
     print(f"Found {len(unique_items)} unique items for {category_name}")
     return {"items": unique_items}
 
+def get_previous_reports(max_reports=10):
+    """
+    Get a list of previous reports in the output directory.
+    
+    Args:
+        max_reports (int): Maximum number of previous reports to include
+        
+    Returns:
+        list: List of tuples (date, filename) of previous reports
+    """
+    import os
+    import re
+    
+    reports = []
+    
+    # Check if the output directory exists
+    if not os.path.exists("output"):
+        return reports
+    
+    # Pattern to match report filenames (plurality_report_YYYY-MM-DD.html)
+    pattern = r"plurality_report_(\d{4}-\d{2}-\d{2})\.html"
+    
+    for filename in os.listdir("output"):
+        match = re.match(pattern, filename)
+        if match:
+            date = match.group(1)
+            reports.append((date, filename))
+    
+    # Sort by date (newest first)
+    reports.sort(reverse=True)
+    
+    # Limit the number of reports
+    return reports[:max_reports]
+
 def generate_html_report(results):
     """
-    Generates an HTML report from the collected results.
+    Generates an HTML report from the collected results, including a sidebar for previous reports.
     
     Args:
         results (dict): Dictionary mapping categories to their results
@@ -261,6 +295,9 @@ def generate_html_report(results):
         str: HTML content of the report
     """
     today = datetime.now().strftime("%Y-%m-%d")
+    
+    # Get the list of previous reports
+    previous_reports = get_previous_reports()
     
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -273,23 +310,78 @@ def generate_html_report(results):
             font-family: 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            min-height: 100vh;
+        }}
+        
+        .sidebar {{
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }}
+        
+        .sidebar h2 {{
+            color: white;
+            border-bottom: 1px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }}
+        
+        .sidebar ul {{
+            list-style: none;
+            padding: 0;
+        }}
+        
+        .sidebar li {{
+            margin-bottom: 8px;
+        }}
+        
+        .sidebar a {{
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            padding: 5px;
+            border-radius: 4px;
+        }}
+        
+        .sidebar a:hover {{
+            background-color: #34495e;
+        }}
+        
+        .sidebar a.active {{
+            background-color: #3498db;
+            font-weight: bold;
+        }}
+        
+        .content {{
+            flex: 1;
+            padding: 20px;
             max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f9f9;
         }}
+        
         h1 {{
             color: #2c3e50;
             border-bottom: 2px solid #3498db;
             padding-bottom: 10px;
-            margin-top: 30px;
+            margin-top: 0;
         }}
+        
         h2 {{
             color: #2c3e50;
             border-left: 4px solid #3498db;
             padding-left: 10px;
             margin-top: 25px;
         }}
+        
         .item {{
             background-color: white;
             border-radius: 5px;
@@ -297,53 +389,95 @@ def generate_html_report(results):
             padding: 15px;
             margin-bottom: 15px;
         }}
+        
         .item h3 {{
             color: #3498db;
             margin-top: 0;
         }}
+        
         .item p {{
             margin: 5px 0;
         }}
+        
         .date {{
             color: #7f8c8d;
             font-size: 0.9em;
         }}
+        
         .source {{
             color: #7f8c8d;
             font-size: 0.9em;
             text-align: right;
         }}
+        
         .description {{
             margin: 10px 0;
         }}
+        
         a {{
             color: #3498db;
             text-decoration: none;
         }}
+        
         a:hover {{
             text-decoration: underline;
         }}
+        
         .report-date {{
             text-align: right;
             color: #7f8c8d;
             font-size: 0.9em;
             margin-top: 10px;
         }}
+        
         .category-description {{
             font-style: italic;
             color: #555;
             margin-bottom: 15px;
         }}
+        
         .no-items {{
             font-style: italic;
             color: #7f8c8d;
             padding: 10px;
         }}
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {{
+            body {{
+                flex-direction: column;
+            }}
+            
+            .sidebar {{
+                width: 100%;
+                height: auto;
+                position: relative;
+            }}
+            
+            .content {{
+                padding: 15px;
+            }}
+        }}
     </style>
 </head>
 <body>
-    <h1>Plurality Institute Daily Knowledge Report</h1>
-    <p class="report-date">Generated on: {today}</p>
+    <div class="sidebar">
+        <h2>Plurality Reports</h2>
+        <ul>
+            <li><a href="plurality_report_{today}.html" class="active">Today ({today})</a></li>
+"""
+    
+    # Add links to previous reports
+    for date, filename in previous_reports:
+        html += f'            <li><a href="{filename}">{date}</a></li>\n'
+    
+    html += """
+        </ul>
+    </div>
+    
+    <div class="content">
+        <h1>Plurality Institute Daily Knowledge Report</h1>
+        <p class="report-date">Generated on: """ + today + """</p>
 """
     
     # Add each category to the HTML
@@ -352,12 +486,12 @@ def generate_html_report(results):
         category_description = PLURALITY_CATEGORIES[category_name]["description"]
         
         html += f"""
-    <h2>{category_title}</h2>
-    <p class="category-description">{category_description}</p>
+        <h2>{category_title}</h2>
+        <p class="category-description">{category_description}</p>
 """
         
         if not category_data.get("items") or len(category_data["items"]) == 0:
-            html += '<p class="no-items">No recent items found.</p>'
+            html += '        <p class="no-items">No recent items found.</p>'
             continue
             
         for item in category_data["items"]:
@@ -368,15 +502,16 @@ def generate_html_report(results):
             source = item.get("source", "")
             
             html += f"""
-    <div class="item">
-        <h3>{"<a href='" + link + "' target='_blank'>" if link else ""}{title}{"</a>" if link else ""}</h3>
-        {f'<p class="date">{date}</p>' if date else ''}
-        <p class="description">{description}</p>
-        {f'<p class="source">Source: {source}</p>' if source else ''}
-    </div>
+        <div class="item">
+            <h3>{"<a href='" + link + "' target='_blank'>" if link else ""}{title}{"</a>" if link else ""}</h3>
+            {f'<p class="date">{date}</p>' if date else ''}
+            <p class="description">{description}</p>
+            {f'<p class="source">Source: {source}</p>' if source else ''}
+        </div>
 """
     
     html += """
+    </div>
 </body>
 </html>"""
     
@@ -419,15 +554,17 @@ def main():
     
     # Generate and save the HTML report
     html_report = generate_html_report(results)
-    report_path = save_report(html_report)
+    
+    # Save with date-specific filename
+    today = datetime.now().strftime("%Y-%m-%d")
+    report_filename = f"plurality_report_{today}.html"
+    report_path = save_report(html_report, report_filename)
+    
+    # Also save to index.html to always have the latest report accessible at a fixed URL
+    index_path = save_report(html_report, "index.html")
     
     print(f"Report generated successfully at: {report_path}")
-    
-    # Optionally, you could add code here to:
-    # 1. Email the report to team members
-    # 2. Upload to a web server
-    # 3. Commit to a GitHub Pages repository
-    # 4. etc.
+    print(f"Latest report also saved to: {index_path}")
 
 if __name__ == "__main__":
     main()
