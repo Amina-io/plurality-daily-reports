@@ -145,10 +145,14 @@ def get_plurality_updates_for_group(category_name, group_name, keywords):
 Find {category_description} related to the following keywords:
 {keywords_str}
 
-IMPORTANT: Only include items from the past 30 days, with a strong preference for items from the past 7 days.
-Exclude any content older than 1 month. The current date is {datetime.now().strftime("%Y-%m-%d")}.
+IMPORTANT: 
+- Today's date is {datetime.now().strftime("%Y-%m-%d")}
+- Only include items from the past 30 days, with a strong preference for items from the past 7 days
+- For events, prioritize events that occur ON OR AFTER {datetime.now().strftime("%Y-%m-%d")}
+- For jobs and opportunities, prioritize positions that are currently open
+- EXCLUDE any content older than 2 months except for research papers
+- Include titles, dates, brief descriptions, links, and sources.
 
-Include titles, dates, brief descriptions, links, and sources.
 Format your response as a JSON object with the following structure:
 {{
   "items": [
@@ -162,10 +166,10 @@ Format your response as a JSON object with the following structure:
   ]
 }}
 
-Only include highly relevant and recent items. Prioritize reputable sources.
+Only include highly relevant items. Prioritize reputable sources.
 Do NOT include any content from plurality.institute or the Plurality Institute's own website.
-If you find fewer than 2 items, expand your search to the past 3 months but clearly mark these as "older content".
-Include information from academic journals, podcasts, relevant substack blogs, LinkedIn, news sites, X.com, Bsky, conference websites, job boards, Luma(an event website) and social media as appropriate. Do not include information for events that have already occurred or opportunities that have already ended.
+If you find fewer than 3 items, expand your search to include additional relevant content.
+Include information from academic journals, podcasts, blogs, LinkedIn, news sites, conference websites, job boards, and social media as appropriate.
 """
         
         data = {
@@ -184,6 +188,10 @@ Include information from academic journals, podcasts, relevant substack blogs, L
             "temperature": 0.2  # Lower temperature for more factual responses
         }
         
+        # Use lower temperature for jobs and events to reduce hallucination
+        if category_name in ["jobs", "events"]:
+            data["temperature"] = 0.1
+        
         try:
             print(f"  Making API request for {category_name}/{group_name} (chunk of {len(chunk)} keywords)...")
             response = requests.post(url, headers=headers, json=data)
@@ -195,8 +203,53 @@ Include information from academic journals, podcasts, relevant substack blogs, L
             try:
                 chunk_results = json.loads(content)
                 if "items" in chunk_results and chunk_results["items"]:
-                    all_items.extend(chunk_results["items"])
-                    print(f"  Found {len(chunk_results['items'])} items for this chunk")
+                    # For events, double-check dates
+                    if category_name == "events":
+                        filtered_items = []
+                        unfiltered_count = len(chunk_results["items"])
+                        
+                        for item in chunk_results["items"]:
+                            date_str = item.get("date", "")
+                            
+                            try:
+                                # Try to parse the date, allowing some flexibility
+                                if date_str:
+                                    # Various date formats
+                                    for fmt in ("%Y-%m-%d", "%Y/%m/%d", "%B %d, %Y", "%d %B %Y"):
+                                        try:
+                                            parsed_date = datetime.strptime(date_str, fmt).date()
+                                            current_date = datetime.now().date()
+                                            
+                                            # Keep future events
+                                            if parsed_date >= current_date:
+                                                filtered_items.append(item)
+                                                break
+                                            elif len(filtered_items) < 3 and parsed_date >= current_date - timedelta(days=14):
+                                                # Keep some very recent past events if we don't have enough items
+                                                item["date"] = f"Recent: {date_str}"
+                                                filtered_items.append(item)
+                                                break
+                                        except ValueError:
+                                            continue
+                                else:
+                                    # No date provided, include it
+                                    filtered_items.append(item)
+                            except Exception as e:
+                                # Include items with parsing issues
+                                print(f"  Error parsing event date: {e}")
+                                filtered_items.append(item)
+                        
+                        if not filtered_items and chunk_results["items"]:
+                            # If we filtered out everything, keep at least some items
+                            filtered_items = chunk_results["items"][:3]
+                            print(f"  Warning: All {unfiltered_count} events filtered out. Keeping some to prevent empty results.")
+                        
+                        all_items.extend(filtered_items)
+                        print(f"  Found {len(filtered_items)} events for this chunk after date filtering")
+                    else:
+                        # For non-event categories, add items without date filtering
+                        all_items.extend(chunk_results["items"])
+                        print(f"  Found {len(chunk_results['items'])} items for this chunk")
             except json.JSONDecodeError:
                 print(f"  Error parsing JSON response for {category_name}/{group_name}. Raw response:")
                 print(content[:200] + "..." if len(content) > 200 else content)
@@ -211,7 +264,6 @@ Include information from academic journals, podcasts, relevant substack blogs, L
         time.sleep(2)
     
     return {"items": all_items}
-
 
 def get_plurality_updates(category_name, category_info):
     """
