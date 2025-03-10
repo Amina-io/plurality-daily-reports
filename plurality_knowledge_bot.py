@@ -22,7 +22,6 @@ API_KEY = os.environ.get("PERPLEXITY_API_KEY")
 if not API_KEY:
     raise ValueError("Please set the PERPLEXITY_API_KEY environment variable")
 
-# Define keyword groups to manage API requests better
 PEOPLE_KEYWORDS = [
     "Alessandra Casella", "Allison Duettmann", "Allison Stanger", "Audrey Tang",
     "Aviv Ovadya", "Beth Noveck", "Bill Doherty", "Bruce Schneier", "CL Kao",
@@ -66,7 +65,6 @@ CONCEPT_KEYWORDS = [
     "decentralized governance"
 ]
 
-# Define the categories with their keyword groups
 PLURALITY_CATEGORIES = {
     "research_papers": {
         "description": "Recent academic papers and publications",
@@ -127,8 +125,6 @@ def get_plurality_updates_for_group(category_name, group_name, keywords):
     """
     url = "https://api.perplexity.ai/chat/completions"
     
-    # Limit the number of keywords per request to avoid token limits
-    # Split into chunks of max 15 keywords
     MAX_KEYWORDS_PER_REQUEST = 15
     keyword_chunks = [keywords[i:i + MAX_KEYWORDS_PER_REQUEST] 
                      for i in range(0, len(keywords), MAX_KEYWORDS_PER_REQUEST)]
@@ -173,7 +169,7 @@ Include information from academic journals, podcasts, relevant substack blogs, L
 """
         
         data = {
-            "model": "sonar-pro",  # Using Perplexity's most capable model
+            "model": "sonar-pro", 
             "messages": [
                 {
                     "role": "system",
@@ -196,7 +192,6 @@ Include information from academic journals, podcasts, relevant substack blogs, L
             result = response.json()
             content = result["choices"][0]["message"]["content"]
             
-            # Parse the JSON response
             try:
                 chunk_results = json.loads(content)
                 if "items" in chunk_results and chunk_results["items"]:
@@ -213,7 +208,6 @@ Include information from academic journals, podcasts, relevant substack blogs, L
         except Exception as e:
             print(f"  Unexpected error for {category_name}/{group_name}: {str(e)}")
         
-        # Add a delay between API calls to avoid rate limiting
         time.sleep(2)
     
     return {"items": all_items}
@@ -233,13 +227,11 @@ def get_plurality_updates(category_name, category_info):
     print(f"Processing category: {category_name}...")
     all_items = []
     
-    # Process each keyword group separately
     for group_name, keywords in category_info["keyword_groups"].items():
         group_results = get_plurality_updates_for_group(category_name, group_name, keywords)
         if "items" in group_results:
             all_items.extend(group_results["items"])
     
-    # Remove duplicate items based on title
     unique_items = []
     seen_titles = set()
     
@@ -267,11 +259,9 @@ def get_previous_reports(max_reports=10):
     
     reports = []
     
-    # Check if the output directory exists
     if not os.path.exists("output"):
         return reports
     
-    # Pattern to match report filenames (plurality_report_YYYY-MM-DD.html)
     pattern = r"plurality_report_(\d{4}-\d{2}-\d{2})\.html"
     
     for filename in os.listdir("output"):
@@ -280,10 +270,8 @@ def get_previous_reports(max_reports=10):
             date = match.group(1)
             reports.append((date, filename))
     
-    # Sort by date (newest first)
     reports.sort(reverse=True)
     
-    # Limit the number of reports
     return reports[:max_reports]
 
 def generate_html_report(results):
@@ -298,7 +286,6 @@ def generate_html_report(results):
     """
     today = datetime.now().strftime("%Y-%m-%d")
     
-    # Get the list of previous reports
     previous_reports = get_previous_reports()
     
     html = f"""<!DOCTYPE html>
@@ -632,7 +619,6 @@ def generate_html_report(results):
         <p class="report-date">Generated on: """ + today + """</p>
 """
     
-    # Add each category to the HTML
     item_counter = 0
     for category_name, category_data in results.items():
         category_title = category_name.replace('_', ' ').title()
@@ -709,19 +695,14 @@ def main():
     
     results = {}
     
-    # Process each category
     for category_name, category_info in PLURALITY_CATEGORIES.items():
         results[category_name] = get_plurality_updates(category_name, category_info)
-    
-    # Generate and save the HTML report
     html_report = generate_html_report(results)
     
-    # Save with date-specific filename
     today = datetime.now().strftime("%Y-%m-%d")
     report_filename = f"plurality_report_{today}.html"
     report_path = save_report(html_report, report_filename)
     
-    # Also save to index.html to always have the latest report accessible at a fixed URL
     index_path = save_report(html_report, "index.html")
     
     print(f"Report generated successfully at: {report_path}")
