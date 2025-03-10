@@ -321,7 +321,7 @@ def generate_html_report(results):
         
         .sidebar {{
             width: 250px;
-            background-color: #2c3e50;
+            background-color: #9070d0;
             color: white;
             padding: 20px;
             position: sticky;
@@ -332,7 +332,7 @@ def generate_html_report(results):
         
         .sidebar h2 {{
             color: white;
-            border-bottom: 1px solid #3498db;
+            border-bottom: 1px solid white;
             padding-bottom: 10px;
             margin-top: 0;
         }}
@@ -355,11 +355,11 @@ def generate_html_report(results):
         }}
         
         .sidebar a:hover {{
-            background-color: #34495e;
+            background-color: #7050b0;
         }}
         
         .sidebar a.active {{
-            background-color: #3498db;
+            background-color: #7050b0;
             font-weight: bold;
         }}
         
@@ -371,15 +371,15 @@ def generate_html_report(results):
         }}
         
         h1 {{
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
+            color: #aa90f0;
+            border-bottom: 2px solid #aa90f0;
             padding-bottom: 10px;
             margin-top: 0;
         }}
         
         h2 {{
-            color: #2c3e50;
-            border-left: 4px solid #3498db;
+            color: #aa90f0; ;
+            border-left: 4px solid #aa90f0;
             padding-left: 10px;
             margin-top: 25px;
         }}
@@ -393,7 +393,7 @@ def generate_html_report(results):
         }}
         
         .item h3 {{
-            color: #3498db;
+            color: #aa90f0;
             margin-top: 0;
         }}
         
@@ -417,7 +417,7 @@ def generate_html_report(results):
         }}
         
         a {{
-            color: #3498db;
+            color: #aa90f0; 
             text-decoration: none;
         }}
         
