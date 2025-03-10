@@ -464,7 +464,7 @@ def generate_html_report(results):
 </head>
 <body>
     <div class="sidebar">
-        <h2>Plurality Reports</h2>
+        <h2>Report Logs</h2>
         <ul>
             <li><a href="plurality_report_{today}.html" class="active">Today ({today})</a></li>
 """
@@ -478,7 +478,7 @@ def generate_html_report(results):
     </div>
     
     <div class="content">
-        <h1>Plurality Institute Daily Knowledge Report</h1>
+        <h1>Plurality Institute Content Sourcing</h1>
         <p class="report-date">Generated on: """ + today + """</p>
 """
     
