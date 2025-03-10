@@ -1,9 +1,13 @@
 name: Daily Knowledge Report
 
 on:
-  schedule:
-    - cron: '0 6 * * *'  # Runs at 6 AM UTC daily
-  workflow_dispatch:  # Allows manual triggering
+    schedule:
+      - cron: '0 6 * * *'  # Runs at 6 AM UTC daily
+    workflow_dispatch:  # Allows manual triggering
+  
+  # Add this permissions block
+permissions:
+    contents: write
 
 jobs:
   generate-report:
