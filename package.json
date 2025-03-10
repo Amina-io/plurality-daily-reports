@@ -1,0 +1,21 @@
+{
+    "name": "plurality-daily-reports",
+    "version": "1.0.0",
+    "description": "A daily knowledge gathering tool for Plurality Institute",
+    "main": "index.js",
+    "scripts": {
+      "dev": "python -m http.server 8000",
+      "start": "python plurality_knowledge_bot.py"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/yourusername/plurality-daily-reports.git"
+    },
+    "keywords": [
+      "plurality",
+      "knowledge-bot",
+      "reports"
+    ],
+    "author": "",
+    "license": "MIT"
+  }

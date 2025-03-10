@@ -146,16 +146,19 @@ def get_plurality_updates_for_group(category_name, group_name, keywords):
         category_description = PLURALITY_CATEGORIES[category_name]["description"]
         
         prompt = f"""You are a content curator for Plurality Institute that sources jobs, events, research papers, media and other information.
-        Find {category_description} related to the following keywords:
-        {keywords_str}
+Find {category_description} related to the following keywords:
+{keywords_str}
 
-        Include titles, dates, brief descriptions, links, and sources.
-         Format your response as a JSON object with the following structure:
+IMPORTANT: Only include items from the past 30 days, with a strong preference for items from the past 7 days.
+Exclude any content older than 1 month. The current date is {datetime.now().strftime("%Y-%m-%d")}.
+
+Include titles, dates, brief descriptions, links, and sources.
+Format your response as a JSON object with the following structure:
 {{
   "items": [
     {{
       "title": "Item title",
-      "date": "Publication date if available",
+      "date": "Publication date in YYYY-MM-DD format when possible",
       "description": "Brief description (50 words max)",
       "link": "URL if available",
       "source": "Source name"
@@ -163,12 +166,10 @@ def get_plurality_updates_for_group(category_name, group_name, keywords):
   ]
 }}
 
-Only include highly relevant items from the past 3 months (since December 2024)" Prioritize reputable sources.
+Only include highly relevant and recent items. Prioritize reputable sources.
 Do NOT include any content from plurality.institute or the Plurality Institute's own website.
-Articles and news must be published after December 1, 2024! Events must be happening after March 11, 2025. 
+If you find fewer than 2 items, expand your search to the past 3 months but clearly mark these as "older content".
 Include information from academic journals, podcasts, relevant substack blogs, LinkedIn, news sites, X.com, Bsky, conference websites, job boards, Luma(an event website) and social media as appropriate. Do not include information for events that have already occurred or opportunities that have already ended.
-For jobs(grants, fellowships, research funding, etc), only include opportunities that are currently active and accepting applications. We want a LOT of opportunities, so don't be too picky on this part. Be sure to try to include 2-3 opportunities.
-For events, we want a lot of events so don't be too picky. As long as they are tangentially related and happening soon, include them! Feel free to include events happening from March, 2025 through January, 2026. 
 """
         
         data = {
