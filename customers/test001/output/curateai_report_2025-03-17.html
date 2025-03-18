@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CurateAI Report for Test Customer - 2025-03-17</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #7050b0;
+            --primary-light: #9070d0;
+            --primary-dark: #5a3a9a;
+            --secondary-color: #aa90f0;
+            --text-color: #333;
+            --text-light: #7f8c8d;
+            --bg-color: #f9f9f9;
+            --card-color: white;
+            --checked-color: #d4edda;
+            --border-radius: 8px;
+            --transition-speed: 0.3s;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: var(--primary-light);
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            transition: all var(--transition-speed);
+        }
+        
+        .sidebar h2 {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-weight: 600;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        
+        .sidebar li {
+            margin-bottom: 8px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: transform var(--transition-speed);
+        }
+        
+        .sidebar li:hover {
+            transform: translateX(5px);
+        }
+        
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            padding: 8px 10px;
+            border-radius: var(--border-radius);
+            transition: background-color var(--transition-speed);
+        }
+        
+        .sidebar a:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .sidebar a.active {
+            background-color: var(--primary-dark);
+            font-weight: 500;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-light);
+            padding-left: 10px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .item {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        
+        .item h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .item p {
+            margin: 5px 0;
+        }
+        
+        .date {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        
+        .source {
+            color: var(--text-light);
+            font-size: 0.9em;
+            text-align: right;
+            margin-top: 10px;
+        }
+        
+        .description {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+        
+        a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .report-date {
+            text-align: right;
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .category-description {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .no-items {
+            font-style: italic;
+            color: var(--text-light);
+            padding: 15px;
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* Checkbox styling */
+        .item-checkbox {
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: text-top;
+        }
+        
+        .item-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .item.checked {
+            background-color: var(--checked-color);
+        }
+        
+        .item-header {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .item-header h3 {
+            flex: 1;
+        }
+        
+        .back-button {
+            background-color: var(--primary-dark);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 10px 0;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+            transition: background-color var(--transition-speed);
+        }
+        
+        .back-button:hover {
+            background-color: var(--primary-color);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                margin-bottom: 20px;
+            }
+            
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .sidebar li {
+                margin-bottom: 0;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .content {
+                padding: 15px;
+            }
+            
+            .item {
+                padding: 15px;
+            }
+        }
+    </style>
+    <script>
+        // Function to load checkbox states from localStorage
+        function loadCheckboxStates() {
+            const checkboxes = document.querySelectorAll('.item-checkbox input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const itemId = checkbox.getAttribute('data-id');
+                const isChecked = localStorage.getItem(itemId) === 'true';
+                checkbox.checked = isChecked;
+                
+                // Apply checked styling
+                if (isChecked) {
+                    checkbox.closest('.item').classList.add('checked');
+                }
+            });
+        }
+        
+        // Function to save checkbox state to localStorage
+        function saveCheckboxState(event) {
+            const checkbox = event.target;
+            const itemId = checkbox.getAttribute('data-id');
+            localStorage.setItem(itemId, checkbox.checked);
+            
+            // Apply or remove checked styling
+            const item = checkbox.closest('.item');
+            if (checkbox.checked) {
+                item.classList.add('checked');
+            } else {
+                item.classList.remove('checked');
+            }
+        }
+        
+        // Navigate back to latest report
+        function backToLatest() {
+            window.location.href = 'curateai_report_2025-03-17.html';
+            return false;
+        }
+        
+        // Initialize when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCheckboxStates();
+            
+            // Add event listeners to all checkboxes
+            const checkboxes = document.querySelectorAll('.item-checkbox input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', saveCheckboxState);
+            });
+            
+            // Add event listener to "Back to Latest" button
+            const backBtn = document.getElementById('back-to-latest');
+            if (backBtn) {
+                backBtn.addEventListener('click', backToLatest);
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>CurateAI Reports</h2>
+        <button id="back-to-latest" class="back-button">Back to Latest</button>
+        <ul>
+            <li><a href="curateai_report_2025-03-17.html" class="active">Today (2025-03-17)</a></li>
+
+        </ul>
+    </div>
+    
+    <div class="content">
+        <h1>CurateAI Daily Knowledge Report</h1>
+        <p class="report-date">Generated on: 2025-03-17</p>
+
+        <h2>Research Papers</h2>
+        <p class="category-description">Recent academic papers and publications</p>
+
+        <div class="item" id="item-research_papers-1">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-1">
+                </div>
+                <h3><a href='https://arxiv.org/abs/2503.01139' target='_blank'>Agentic AI Needs a Systems Theory</a></h3>
+            </div>
+            <p class="date">2025-03-17</p>
+            <p class="description">This paper proposes a systems theory approach for agentic AI, addressing challenges in goal-setting, decision-making, and action-taking for autonomous AI systems.</p>
+            <p class="source">Source: arXiv</p>
+        </div>
+
+        <div class="item" id="item-research_papers-2">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-2">
+                </div>
+                <h3><a href='https://arxiv.org/abs/2503.01163' target='_blank'>Human-AI Collaboration: Trade-offs Between Performance and Preferences</a></h3>
+            </div>
+            <p class="date">2025-03-17</p>
+            <p class="description">This study examines the balance between AI performance and human preferences in collaborative settings, offering insights for designing effective human-AI partnerships.</p>
+            <p class="source">Source: arXiv</p>
+        </div>
+
+        <div class="item" id="item-research_papers-3">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-3">
+                </div>
+                <h3><a href='https://arxiv.org/abs/2503.01176' target='_blank'>Instructor-Worker Alignment in Large Language Models</a></h3>
+            </div>
+            <p class="date">2025-03-17</p>
+            <p class="description">This paper explores methods to improve alignment between instruction-following and task-completion in large language models, enhancing their reliability and effectiveness.</p>
+            <p class="source">Source: arXiv</p>
+        </div>
+
+        <div class="item" id="item-research_papers-4">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-4">
+                </div>
+                <h3><a href='https://github.com/dair-ai/ML-Papers-of-the-Week' target='_blank'>The Danger of Overthinking in Large Reasoning Models</a></h3>
+            </div>
+            <p class="date">2025-03-15</p>
+            <p class="description">This study investigates the phenomenon of overthinking in Large Reasoning Models, analyzing its impact on task performance and proposing mitigation strategies.</p>
+            <p class="source">Source: DAIR.AI ML Papers of the Week</p>
+        </div>
+
+        <div class="item" id="item-research_papers-5">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-5">
+                </div>
+                <h3><a href='https://github.com/dair-ai/ML-Papers-of-the-Week' target='_blank'>Inner Thinking Transformers: Enhancing Reasoning Efficiency in Small-Scale LLMs</a></h3>
+            </div>
+            <p class="date">2025-03-15</p>
+            <p class="description">This paper introduces Inner Thinking Transformers, a method to improve reasoning efficiency in small-scale language models through dynamic depth scaling.</p>
+            <p class="source">Source: DAIR.AI ML Papers of the Week</p>
+        </div>
+
+        <h2>Industry News</h2>
+        <p class="category-description">Latest news and developments</p>
+
+        <div class="item" id="item-industry_news-6">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-6">
+                </div>
+                <h3><a href='https://www.searchenginejournal.com/google-begins-rolling-out-march-core-algorithm-update/541981/' target='_blank'>Google March 2025 Core Update Rolling Out</a></h3>
+            </div>
+            <p class="date">2025-03-14</p>
+            <p class="description">Google has begun rolling out its March 2025 core algorithm update. The update is expected to take up to two weeks to fully deploy and may impact search rankings across the web.</p>
+            <p class="source">Source: Search Engine Journal</p>
+        </div>
+
+        <div class="item" id="item-industry_news-7">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-7">
+                </div>
+                <h3><a href='https://openai.com/index/new-tools-for-building-agents/' target='_blank'>OpenAI Launches New Tools for Building AI Agents</a></h3>
+            </div>
+            <p class="date">2025-03-11</p>
+            <p class="description">OpenAI introduced a new set of APIs and tools designed to help developers and enterprises build, deploy and scale AI agents. The release includes a new Responses API, built-in tools, and an Agents SDK.</p>
+            <p class="source">Source: OpenAI</p>
+        </div>
+
+        <div class="item" id="item-industry_news-8">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-8">
+                </div>
+                <h3><a href='https://www.nichepursuits.com/googles-march-2025-core-update/' target='_blank'>Google's March 2025 Core Update Promises to Prioritize Content Creators</a></h3>
+            </div>
+            <p class="date">2025-03-15</p>
+            <p class="description">Google's latest core update comes with a promise to improve visibility for content creators. Early signs suggest that human-created content may see a boost in rankings.</p>
+            <p class="source">Source: Niche Pursuits</p>
+        </div>
+
+        <div class="item" id="item-industry_news-9">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-9">
+                </div>
+                <h3><a href='https://openai.com/global-affairs/openai-proposals-for-the-us-ai-action-plan/' target='_blank'>OpenAI Shares Proposals for U.S. AI Action Plan</a></h3>
+            </div>
+            <p class="date">2025-03-13</p>
+            <p class="description">OpenAI submitted recommendations to the White House Office of Science and Technology for the upcoming U.S. AI Action Plan, focusing on strengthening America's AI leadership and ensuring 'freedom of intelligence'.</p>
+            <p class="source">Source: OpenAI</p>
+        </div>
+
+        <h2>Events</h2>
+        <p class="category-description">Upcoming conferences, events, workshops, talks, and meetups</p>
+
+        <div class="item" id="item-events-10">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-events-10">
+                </div>
+                <h3><a href='https://gastro.org/aga-leadership/centers/aga-center-for-gi-innovation-technology/aga-tech-summit/' target='_blank'>2025 AGA Tech Summit</a></h3>
+            </div>
+            <p class="date">2025-04-03</p>
+            <p class="description">The AGA Tech Summit in Chicago focuses on the future GI landscape, bridging FDA approval and reimbursement, and funding for GI innovations. Features Shark Tank pitch competition, Innovation Fellows Program, and VC/Startup Consultations.</p>
+            <p class="source">Source: American Gastroenterological Association</p>
+        </div>
+
+        <div class="item" id="item-events-11">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-events-11">
+                </div>
+                <h3><a href='https://www.ana.net/content/show/id/ms-mfm-mar25' target='_blank'>2025 ANA AI and Technology for Marketers Conference</a></h3>
+            </div>
+            <p class="date">2025-03-26</p>
+            <p class="description">Conference in Austin, Texas exploring the intersection of AI, MarTech, and emerging platforms in marketing. Features expert sessions and workshops on integrating intelligent technologies into marketing strategies.</p>
+            <p class="source">Source: Association of National Advertisers</p>
+        </div>
+
+        <div class="item" id="item-events-12">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-events-12">
+                </div>
+                <h3><a href='https://www.aai.msstate.edu/2025-ai-ag-conference' target='_blank'>2025 AI in Ag Conference</a></h3>
+            </div>
+            <p class="date">2025-03-31</p>
+            <p class="description">4th annual conference hosted by Mississippi State University focusing on the role of AI in autonomous agricultural systems and socioeconomic effects. Welcomes abstracts from all fields of AI in agriculture.</p>
+            <p class="source">Source: Agricultural Autonomy Institute</p>
+        </div>
+
+        <h2>Jobs</h2>
+        <p class="category-description">Job opportunities, fellowships, grants, and positions</p>
+
+        <div class="item" id="item-jobs-13">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-13">
+                </div>
+                <h3><a href='https://jooble.org/jobs-machine-learning-engineer' target='_blank'>Machine Learning Engineer</a></h3>
+            </div>
+            <p class="date">2025-03-14</p>
+            <p class="description">Remote position for a Machine Learning Engineer to develop and implement cutting-edge AI algorithms at Flair Labs. Full-time role focused on lead generation automation using call analysis.</p>
+            <p class="source">Source: Jooble</p>
+        </div>
+
+        <div class="item" id="item-jobs-14">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-14">
+                </div>
+                <h3><a href='https://www.indeed.com/q-2025-ai-internships-jobs.html' target='_blank'>AI Research Intern – Spring 2025 (Remote)</a></h3>
+            </div>
+            <p class="date">2025-03-17</p>
+            <p class="description">Remote AI research internship at Chromie Health for Spring 2025. Seeking candidates with strong analytical skills in AI, machine learning, or healthcare technology. Potential for future full-time positions.</p>
+            <p class="source">Source: Indeed</p>
+        </div>
+
+        <div class="item" id="item-jobs-15">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-15">
+                </div>
+                <h3><a href='https://philjobs.org/job/show/28878' target='_blank'>Post-Doctoral Associate/Research Scientist</a></h3>
+            </div>
+            <p class="date">2025-03-12</p>
+            <p class="description">NYU Department of Philosophy and Center for Mind, Brain, and Consciousness seeking post-doctoral associates or research scientists specializing in philosophy of artificial intelligence and philosophy of mind. Starting September 2025.</p>
+            <p class="source">Source: PhilJobs</p>
+        </div>
+
+    </div>
+</body>
+</html>

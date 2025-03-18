@@ -1,0 +1,33 @@
+{
+  "customer_id": "test_customer",
+  "email": "test_customer@example.com",
+  "name": "New Customer",
+  "subscription_tier": "basic",
+  "categories": {
+    "research_papers": {
+      "description": "Recent academic papers and publications",
+      "keyword_groups": {
+        "concepts": []
+      }
+    },
+    "industry_news": {
+      "description": "Latest news and developments",
+      "keyword_groups": {
+        "organizations": []
+      }
+    },
+    "events": {
+      "description": "Upcoming conferences, events, workshops, talks, and meetups",
+      "keyword_groups": {
+        "events": []
+      }
+    },
+    "jobs": {
+      "description": "Job opportunities, fellowships, grants, and positions",
+      "keyword_groups": {
+        "jobs": []
+      }
+    }
+  },
+  "last_run": "2025-03-17T15:04:17.079533"
+}

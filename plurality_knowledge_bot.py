@@ -26,7 +26,7 @@ PEOPLE_KEYWORDS = [
     "Alessandra Casella", "Allison Duettmann", "Allison Stanger", "Audrey Tang",
     "Aviv Ovadya", "Beth Noveck", "Bill Doherty", "Bruce Schneier", "CL Kao",
     "Charlotte Cavaillé", "Colin Megill", "Cory Doctorow", "Danielle Allen",
-    "Daron Acemoglu", "David Bloomin", "Deb Roy", "Deepti Doshi", "Dimitrios Xefteris",
+    "Daron Acemoglu", "David Bloomin", "Deepti Doshi", "Dimitrios Xefteris",
     "Divya Siddarth", "Edward Casternova", "Eli Pariser", "Eric A. Posner",
     "Eugene Leventhal", "Evan Miyazono", "Glen Weyl", "Helen Nissenbaum",
     "James Evans", "Jamie Joyce", "Jeffrey Fossett", "John Etchemendy",
@@ -296,7 +296,7 @@ def get_plurality_updates(category_name, category_info):
     print(f"Found {len(unique_items)} unique items for {category_name}")
     return {"items": unique_items}
 
-def get_previous_reports(max_reports=10):
+def get_previous_reports(max_reports=30):
     """
     Get a list of previous reports in the output directory.
     
@@ -337,8 +337,61 @@ def generate_html_report(results):
         str: HTML content of the report
     """
     today = datetime.now().strftime("%Y-%m-%d")
-    
     previous_reports = get_previous_reports()
+    
+    # Add JavaScript for better navigation
+    navigation_script = """
+    <script>
+        // Store current report page in sessionStorage
+        function storeCurrentPage() {
+            sessionStorage.setItem('currentReport', window.location.href);
+        }
+        
+        // Navigate back to most recent report
+        function backToLatest() {
+            window.location.href = 'plurality_report_' + getCurrentDate() + '.html';
+            return false;
+        }
+        
+        function getCurrentDate() {
+            const now = new Date();
+            return now.getFullYear() + '-' + 
+                   String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                   String(now.getDate()).padStart(2, '0');
+        }
+        
+        // Initialize when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            storeCurrentPage();
+            
+            // Add event listener to "Back to Latest" button
+            const backBtn = document.getElementById('back-to-latest');
+            if (backBtn) {
+                backBtn.addEventListener('click', backToLatest);
+            }
+        });
+    </script>
+    """
+    
+    # Add CSS for the back button
+    back_button_css = """
+    .back-button {
+        background-color: var(--primary-dark);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        margin: 10px 0;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        width: 100%;
+        font-weight: 500;
+        transition: background-color var(--transition-speed);
+    }
+    
+    .back-button:hover {
+        background-color: var(--primary-color);
+    }
+    """
     
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -543,117 +596,15 @@ def generate_html_report(results):
             box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }}
         
-        /* Checkbox styling */
-        .item-checkbox {{
-            display: inline-block;
-            margin-right: 10px;
-            vertical-align: text-top;
-        }}
-        
-        .item-checkbox input[type="checkbox"] {{
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }}
-        
-        .item.checked {{
-            background-color: var(--checked-color);
-        }}
-        
-        .item-header {{
-            display: flex;
-            align-items: flex-start;
-        }}
-        
-        .item-header h3 {{
-            flex: 1;
-        }}
-        
-        /* Responsive adjustments */
-        @media (max-width: 900px) {{
-            body {{
-                flex-direction: column;
-            }}
-            
-            .sidebar {{
-                width: 100%;
-                height: auto;
-                position: relative;
-                margin-bottom: 20px;
-            }}
-            
-            .sidebar ul {{
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-            }}
-            
-            .sidebar li {{
-                margin-bottom: 0;
-            }}
-            
-            .content {{
-                padding: 20px;
-            }}
-        }}
-        
-        @media (max-width: 600px) {{
-            .content {{
-                padding: 15px;
-            }}
-            
-            .item {{
-                padding: 15px;
-            }}
-        }}
+        {back_button_css}
     </style>
-    <script>
-        // Function to load checkbox states from localStorage
-        function loadCheckboxStates() {{
-            const checkboxes = document.querySelectorAll('.item-checkbox input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {{
-                const itemId = checkbox.getAttribute('data-id');
-                const isChecked = localStorage.getItem(itemId) === 'true';
-                checkbox.checked = isChecked;
-                
-                // Apply checked styling
-                if (isChecked) {{
-                    checkbox.closest('.item').classList.add('checked');
-                }}
-            }});
-        }}
-        
-        // Function to save checkbox state to localStorage
-        function saveCheckboxState(event) {{
-            const checkbox = event.target;
-            const itemId = checkbox.getAttribute('data-id');
-            localStorage.setItem(itemId, checkbox.checked);
-            
-            // Apply or remove checked styling
-            const item = checkbox.closest('.item');
-            if (checkbox.checked) {{
-                item.classList.add('checked');
-            }} else {{
-                item.classList.remove('checked');
-            }}
-        }}
-        
-        // Initialize when the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', function() {{
-            loadCheckboxStates();
-            
-            // Add event listeners to all checkboxes
-            const checkboxes = document.querySelectorAll('.item-checkbox input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {{
-                checkbox.addEventListener('change', saveCheckboxState);
-            }});
-        }});
-    </script>
+    {navigation_script}
 </head>
 <body>
     <div class="sidebar">
         <h2>Plurality Reports</h2>
-        <ul>
+        <button id="back-to-latest" class="back-button">Back to Latest</button>
+        <ul id="sidebar-reports">
             <li><a href="plurality_report_{today}.html" class="active">Today ({today})</a></li>
 """
     
@@ -716,9 +667,44 @@ def generate_html_report(results):
     
     return html
 
+def update_report_index():
+    """
+    Creates or updates a JSON file that indexes all available reports.
+    This will be used by the HTML reports to dynamically build the sidebar.
+    """
+    import os
+    import re
+    import json
+    
+    reports = []
+    if not os.path.exists("output"):
+        os.makedirs("output", exist_ok=True)
+        return
+    
+    pattern = r"plurality_report_(\d{4}-\d{2}-\d{2})\.html"
+    
+    for filename in os.listdir("output"):
+        match = re.match(pattern, filename)
+        if match:
+            date = match.group(1)
+            reports.append({
+                "date": date,
+                "filename": filename
+            })
+    
+    # Sort reports by date (newest first)
+    reports.sort(key=lambda x: x["date"], reverse=True)
+    
+    # Write to index file
+    index_path = os.path.join("output", "report_index.json")
+    with open(index_path, "w", encoding="utf-8") as f:
+        json.dump({"reports": reports}, f)
+    
+    return reports
+
 def save_report(html_content, filename=None):
     """
-    Saves the HTML report to a file.
+    Saves the HTML report to a file and ensures all links are valid.
     
     Args:
         html_content (str): HTML content to save
@@ -733,6 +719,21 @@ def save_report(html_content, filename=None):
     
     # Create output directory if it doesn't exist
     os.makedirs("output", exist_ok=True)
+    
+    # Create an index.html that redirects to the latest report
+    index_html = f"""<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="refresh" content="0; url=plurality_report_{datetime.now().strftime('%Y-%m-%d')}.html">
+    </head>
+    <body>
+        <p>Redirecting to latest report...</p>
+    </body>
+    </html>
+    """
+    
+    with open(os.path.join("output", "index.html"), "w", encoding="utf-8") as f:
+        f.write(index_html)
     
     filepath = os.path.join("output", filename)
     with open(filepath, "w", encoding="utf-8") as f:

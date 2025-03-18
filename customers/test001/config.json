@@ -1,0 +1,45 @@
+{
+  "customer_id": "test001",
+  "email": "test@example.com",
+  "name": "Test Customer",
+  "subscription_tier": "basic",
+  "categories": {
+    "research_papers": {
+      "description": "Recent academic papers and publications",
+      "keyword_groups": {
+        "concepts": [
+          "artificial intelligence",
+          "machine learning"
+        ]
+      }
+    },
+    "industry_news": {
+      "description": "Latest news and developments",
+      "keyword_groups": {
+        "organizations": [
+          "Google",
+          "OpenAI"
+        ]
+      }
+    },
+    "events": {
+      "description": "Upcoming conferences, events, workshops, talks, and meetups",
+      "keyword_groups": {
+        "events": [
+          "AI conference",
+          "tech summit"
+        ]
+      }
+    },
+    "jobs": {
+      "description": "Job opportunities, fellowships, grants, and positions",
+      "keyword_groups": {
+        "jobs": [
+          "machine learning engineer",
+          "AI researcher"
+        ]
+      }
+    }
+  },
+  "last_run": "2025-03-17T17:24:18.938430"
+}
