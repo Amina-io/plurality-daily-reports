@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plurality Daily Knowledge Report - 2025-03-15</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #7050b0;
+            --primary-light: #9070d0;
+            --primary-dark: #5a3a9a;
+            --secondary-color: #aa90f0;
+            --text-color: #333;
+            --text-light: #7f8c8d;
+            --bg-color: #f9f9f9;
+            --card-color: white;
+            --checked-color: #d4edda;
+            --border-radius: 8px;
+            --transition-speed: 0.3s;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: var(--primary-light);
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            transition: all var(--transition-speed);
+        }
+        
+        .sidebar h2 {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-weight: 600;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        
+        .sidebar li {
+            margin-bottom: 8px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: transform var(--transition-speed);
+        }
+        
+        .sidebar li:hover {
+            transform: translateX(5px);
+        }
+        
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            padding: 8px 10px;
+            border-radius: var(--border-radius);
+            transition: background-color var(--transition-speed);
+        }
+        
+        .sidebar a:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .sidebar a.active {
+            background-color: var(--primary-dark);
+            font-weight: 500;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-light);
+            padding-left: 10px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .item {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        
+        .item h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .item p {
+            margin: 5px 0;
+        }
+        
+        .date {
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        
+        .source {
+            color: var(--text-light);
+            font-size: 0.9em;
+            text-align: right;
+            margin-top: 10px;
+        }
+        
+        .description {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+        
+        a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        .report-date {
+            text-align: right;
+            color: var(--text-light);
+            font-size: 0.9em;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .category-description {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        
+        .no-items {
+            font-style: italic;
+            color: var(--text-light);
+            padding: 15px;
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* Checkbox styling */
+        .item-checkbox {
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: text-top;
+        }
+        
+        .item-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .item.checked {
+            background-color: var(--checked-color);
+        }
+        
+        .item-header {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .item-header h3 {
+            flex: 1;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                margin-bottom: 20px;
+            }
+            
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .sidebar li {
+                margin-bottom: 0;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .content {
+                padding: 15px;
+            }
+            
+            .item {
+                padding: 15px;
+            }
+        }
+    </style>
+    <script>
+        // Function to load checkbox states from localStorage
+        function loadCheckboxStates() {
+            const checkboxes = document.querySelectorAll('.item-checkbox input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                const itemId = checkbox.getAttribute('data-id');
+                const isChecked = localStorage.getItem(itemId) === 'true';
+                checkbox.checked = isChecked;
+                
+                // Apply checked styling
+                if (isChecked) {
+                    checkbox.closest('.item').classList.add('checked');
+                }
+            });
+        }
+        
+        // Function to save checkbox state to localStorage
+        function saveCheckboxState(event) {
+            const checkbox = event.target;
+            const itemId = checkbox.getAttribute('data-id');
+            localStorage.setItem(itemId, checkbox.checked);
+            
+            // Apply or remove checked styling
+            const item = checkbox.closest('.item');
+            if (checkbox.checked) {
+                item.classList.add('checked');
+            } else {
+                item.classList.remove('checked');
+            }
+        }
+        
+        // Initialize when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCheckboxStates();
+            
+            // Add event listeners to all checkboxes
+            const checkboxes = document.querySelectorAll('.item-checkbox input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', saveCheckboxState);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Plurality Reports</h2>
+        <ul>
+            <li><a href="plurality_report_2025-03-15.html" class="active">Today (2025-03-15)</a></li>
+            <li><a href="plurality_report_2025-03-14.html">2025-03-14</a></li>
+            <li><a href="plurality_report_2025-03-13.html">2025-03-13</a></li>
+            <li><a href="plurality_report_2025-03-12.html">2025-03-12</a></li>
+            <li><a href="plurality_report_2025-03-11.html">2025-03-11</a></li>
+            <li><a href="plurality_report_2025-03-10.html">2025-03-10</a></li>
+            <li><a href="plurality_report_2025-03-08.html">2025-03-08</a></li>
+            <li><a href="plurality_report_2025-03-07.html">2025-03-07</a></li>
+
+        </ul>
+    </div>
+    
+    <div class="content">
+        <h1>Plurality Institute Daily Content Curator</h1>
+        <p class="report-date">Generated on: 2025-03-15</p>
+
+        <h2>Research Papers</h2>
+        <p class="category-description">Recent academic papers and publications</p>
+
+        <div class="item" id="item-research_papers-1">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-1">
+                </div>
+                <h3><a href='https://www.brookings.edu/articles/its-time-for-collective-intelligence/' target='_blank'>It's time for collective intelligence</a></h3>
+            </div>
+            <p class="date">2025-03-07</p>
+            <p class="description">This article argues that the science of collective intelligence (CI) offers a powerful framework for understanding and managing the world's toughest challenges, particularly in relation to sustainable development goals.</p>
+            <p class="source">Source: Brookings Institution</p>
+        </div>
+
+        <div class="item" id="item-research_papers-2">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-2">
+                </div>
+                <h3><a href='https://kroc.nd.edu/news-events/events/2024/03/14/digital-democracy-defending-democracy-with-new-deliberative-technologies/' target='_blank'>Defending Democracy with New Deliberative Technologies</a></h3>
+            </div>
+            <p class="date">2024-03-14</p>
+            <p class="description">This policy symposium explores how new digital tools can help defend democracy by supporting public discussion on policy issues, encouraging citizen participation, and synthesizing a wide range of insights.</p>
+            <p class="source">Source: University of Notre Dame Keough School of Global Affairs</p>
+        </div>
+
+        <div class="item" id="item-research_papers-3">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-3">
+                </div>
+                <h3><a href='https://collaborativeconservation.org/2025/03/12/shared-governance/' target='_blank'>Shared Governance</a></h3>
+            </div>
+            <p class="date">2025-03-13</p>
+            <p class="description">This article discusses the concept of collaborative governance in conservation efforts, highlighting recent research on the effectiveness of governance structures in forest landscape restoration programs.</p>
+            <p class="source">Source: Center for Collaborative Conservation</p>
+        </div>
+
+        <div class="item" id="item-research_papers-4">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-4">
+                </div>
+                <h3><a href='https://www.hks.harvard.edu/events/building-digital-democracy' target='_blank'>Building a Digital Democracy</a></h3>
+            </div>
+            <p class="date">2025-03-15</p>
+            <p class="description">This upcoming panel event explores how technology is being used to transform political institutions, civil society, and political culture to support more representative, transparent, responsive, and participatory democracy.</p>
+            <p class="source">Source: Harvard Kennedy School</p>
+        </div>
+
+        <div class="item" id="item-research_papers-5">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-5">
+                </div>
+                <h3><a href='https://shows.acast.com/the-foresight-institute-podcast/episodes/xhope-for-2025' target='_blank'>Allison Duettmann & Beatrice Erkers | A Vision of Existential Hope for the New Year</a></h3>
+            </div>
+            <p class="date">2024-12-27</p>
+            <p class="description">Podcast episode where Allison Duettmann and Beatrice Erkers discuss reimagining the future from a place of hope, exploring concepts like moral circle expansion and how neurotech could deepen empathy.</p>
+            <p class="source">Source: The Foresight Institute Podcast</p>
+        </div>
+
+        <div class="item" id="item-research_papers-6">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-6">
+                </div>
+                <h3><a href='https://www.goodreads.com/author/list/22680370.Allison_Duettmann' target='_blank'>Gaming the future: Technologies for Intelligent Voluntary Cooperation</a></h3>
+            </div>
+            <p class="date">2025-03-12</p>
+            <p class="description">New book by Allison Duettmann exploring technologies for intelligent voluntary cooperation. Recently published and gaining attention on Goodreads.</p>
+            <p class="source">Source: Goodreads</p>
+        </div>
+
+        <div class="item" id="item-research_papers-7">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-7">
+                </div>
+                <h3><a href='https://www.sciencedirect.com/science/article/pii/S0899825624000186' target='_blank'>Ideological Consistency and Valence</a></h3>
+            </div>
+            <p class="date">2025-03-01</p>
+            <p class="description">New paper by Enriqueta Aragonès and Dimitrios Xefteris examining how ideological consistency and valence affect political competition and voter behavior.</p>
+            <p class="source">Source: Games and Economic Behavior</p>
+        </div>
+
+        <div class="item" id="item-research_papers-8">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-8">
+                </div>
+                <h3><a href='https://link.springer.com/book/10.1007/978-3-031-45437-5' target='_blank'>The IT Society in India, Its Inhabitants, and Their Lives of Desperation</a></h3>
+            </div>
+            <p class="date">2025-03-10</p>
+            <p class="description">Recent publication by Suddhabrata Deb Roy exploring the societal impacts of India's IT industry growth on workers and communities.</p>
+            <p class="source">Source: Springer</p>
+        </div>
+
+        <div class="item" id="item-research_papers-9">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-9">
+                </div>
+                <h3><a href='https://sites.google.com/msu.edu/eguia/research/working-papers' target='_blank'>Central Advantage: a geographic measure of partisan fairness in redistricting</a></h3>
+            </div>
+            <p class="date">2024-12</p>
+            <p class="description">Jon X. Eguia and Jeff Barton introduce a new geographic measure of partisan advantage in redistricting maps. This working paper presents a novel approach to assessing fairness in electoral district boundaries.</p>
+            <p class="source">Source: Jon X. Eguia's Michigan State University website</p>
+        </div>
+
+        <div class="item" id="item-research_papers-10">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-10">
+                </div>
+                <h3><a href='https://sites.google.com/msu.edu/eguia/research/working-papers' target='_blank'>Can growth heal the political divide?</a></h3>
+            </div>
+            <p class="date">2025-03</p>
+            <p class="description">Jon X. Eguia and Dimitrios Xefteris explore the relationship between economic growth and political polarization, measuring polarization by the cost agents are willing to incur to advance their ideas.</p>
+            <p class="source">Source: Jon X. Eguia's Michigan State University website</p>
+        </div>
+
+        <div class="item" id="item-research_papers-11">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-11">
+                </div>
+                <h3><a href='https://econ.msu.edu/News-Events/News' target='_blank'>Professor Jon X. Eguia receives 2024 College of Social Science Cross-Disciplinary Faculty Research Award</a></h3>
+            </div>
+            <p class="date">2024-05-03</p>
+            <p class="description">Jon X. Eguia was awarded the 2024 College of Social Science Cross-Disciplinary Faculty Research Award at Michigan State University, recognizing his interdisciplinary work in economics and political science.</p>
+            <p class="source">Source: Michigan State University Department of Economics</p>
+        </div>
+
+        <div class="item" id="item-research_papers-12">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-12">
+                </div>
+                <h3><a href='https://www.podchaser.com/podcasts/epicenter-learn-about-crypto-b-218537/episodes/puja-ohlhaver-why-community-cu-242456782/transcript' target='_blank'>Decentralized Society: Finding Web3's Soul</a></h3>
+            </div>
+            <p class="date">2025-03-01</p>
+            <p class="description">Puja Ohlhaver discusses the importance of community currencies for governance in decentralized societies, emphasizing the need to move away from global protocols to achieve a more balanced distribution of power.</p>
+            <p class="source">Source: Epicenter Podcast</p>
+        </div>
+
+        <div class="item" id="item-research_papers-13">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-13">
+                </div>
+                <h3><a href='https://dl.acm.org/doi/full/10.1145/3649318' target='_blank'>Agent-Based Model of Initial Token Allocations</a></h3>
+            </div>
+            <p class="date">2025-03-14</p>
+            <p class="description">This paper references work by E. Glen Weyl, Puja Ohlhaver, and Vitalik Buterin in the context of discussing governance in public-permissionless systems and voting rights token-based governance.</p>
+            <p class="source">Source: ACM Digital Library</p>
+        </div>
+
+        <div class="item" id="item-research_papers-14">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-14">
+                </div>
+                <h3><a href='https://www.cambridge.org/core/journals/european-journal-of-risk-regulation/article/dao-token-transferability-property-contract-and-technology/98A0BD8814A1472C962F635397E33036' target='_blank'>DAO Token Transferability: Property, Contract, and Technology</a></h3>
+            </div>
+            <p class="date">2024-12-27</p>
+            <p class="description">This academic paper cites work by Eric Glen Weyl, Puja Ohlhaver and Vitalik Buterin on decentralized society. While slightly older, it provides relevant context to recent discussions.</p>
+            <p class="source">Source: European Journal of Risk Regulation</p>
+        </div>
+
+        <div class="item" id="item-research_papers-15">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-15">
+                </div>
+                <h3><a href='https://www.aacu.org/event/the-promise-of-pluralism-in-an-age-of-prejudice' target='_blank'>The Promise of Pluralism in an Age of Prejudice: Addressing Antisemitism and Islamophobia on College Campuses</a></h3>
+            </div>
+            <p class="date">2025-03-11</p>
+            <p class="description">A workshop for college and university presidents and senior administrators to address antisemitism and Islamophobia on campuses, promoting dialogue and pluralism.</p>
+            <p class="source">Source: Association of American Colleges & Universities</p>
+        </div>
+
+        <div class="item" id="item-research_papers-16">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-16">
+                </div>
+                <h3><a href='https://techpolicy.press/should-agi-really-be-the-goal-of-artificial-intelligence-research' target='_blank'>Should AGI Really Be the Goal of Artificial Intelligence Research?</a></h3>
+            </div>
+            <p class="date">2025-03-09</p>
+            <p class="description">A podcast discussion with AI ethics experts on the problems with pursuing artificial general intelligence (AGI) as the primary goal of AI research, calling for more specific and pluralistic approaches.</p>
+            <p class="source">Source: Tech Policy Press</p>
+        </div>
+
+        <div class="item" id="item-research_papers-17">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-17">
+                </div>
+                <h3><a href='https://techpolicy.press/to-preserve-us-ai-leadership-congress-must-address-copyright' target='_blank'>To Preserve US AI Leadership, Congress Must Address Copyright</a></h3>
+            </div>
+            <p class="date">2025-03-13</p>
+            <p class="description">An article arguing that Congress should codify fair use for AI training data to maintain US competitiveness in AI development, while balancing creator rights through opt-out mechanisms.</p>
+            <p class="source">Source: Tech Policy Press</p>
+        </div>
+
+        <div class="item" id="item-research_papers-18">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-research_papers-18">
+                </div>
+                <h3><a href='https://techpolicy.press/ukraines-hardwon-approach-to-strategic-communications-and-counterdisinformation-lessons-for-europe-and-beyond' target='_blank'>Ukraine's Hard-Won Approach to Strategic Communications and Counterdisinformation: Lessons for Europe and Beyond</a></h3>
+            </div>
+            <p class="date">2025-03-12</p>
+            <p class="description">An analysis of Ukraine's strategies for combating disinformation, emphasizing proactive communication, AI-driven situational awareness, and authentic content ecosystems to build resilience against information warfare.</p>
+            <p class="source">Source: Tech Policy Press</p>
+        </div>
+
+        <h2>Industry News</h2>
+        <p class="category-description">Latest news and developments</p>
+
+        <div class="item" id="item-industry_news-19">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-19">
+                </div>
+                <h3><a href='https://www.gov.ca.gov/2025/02/23/california-to-launch-first-in-the-nation-digital-democracy-effort-to-improve-public-engagement/' target='_blank'>California to launch first-in-the-nation digital democracy effort to improve public engagement</a></h3>
+            </div>
+            <p class="date">2025-02-23</p>
+            <p class="description">Governor Newsom announced a pilot program called Engaged California to support community conversations about important topics using digital platforms, aiming to lead the nation in deliberative democracy.</p>
+            <p class="source">Source: Office of Governor Gavin Newsom</p>
+        </div>
+
+        <div class="item" id="item-industry_news-20">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-20">
+                </div>
+                <h3><a href='https://eic.ec.europa.eu/news/meet-european-social-innovation-competition-finalists-promoting-digital-democracy-2025-02-20_en' target='_blank'>Meet the European Social Innovation Competition finalists promoting digital democracy</a></h3>
+            </div>
+            <p class="date">2025-02-20</p>
+            <p class="description">The European Commission announced finalists for a competition focused on innovative projects developing tools to combat disinformation, foster democratic practices, and empower grassroots communities through digital means.</p>
+            <p class="source">Source: European Innovation Council</p>
+        </div>
+
+        <div class="item" id="item-industry_news-21">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-21">
+                </div>
+                <h3><a href='https://craft-cities.eu/craft-final-event-reflections-on-collaborative-urban-governance-and-the-future-of-neb/' target='_blank'>CrAFt Final Event: Reflections on Collaborative Urban Governance and the Future of NEB</a></h3>
+            </div>
+            <p class="date">2025-03-11</p>
+            <p class="description">The EU project CrAFt held its final event in Brussels, discussing collaborative governance in sustainable urban development and showcasing achievements from various European cities in integrating New European Bauhaus principles.</p>
+            <p class="source">Source: CrAFt Cities</p>
+        </div>
+
+        <div class="item" id="item-industry_news-22">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-22">
+                </div>
+                <h3><a href='https://www.eventbrite.com/e/strengthening-african-development-through-collaborative-governance-tickets-1280199233369' target='_blank'>Strengthening African Development Through Collaborative Governance</a></h3>
+            </div>
+            <p class="date">2025-03-25</p>
+            <p class="description">Upcoming event at UN Headquarters focusing on promoting sustainable development in Africa through collaborative governance, organized by the Permanent Mission of Senegal in collaboration with international organizations.</p>
+            <p class="source">Source: Eventbrite</p>
+        </div>
+
+        <div class="item" id="item-industry_news-23">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-23">
+                </div>
+                <h3><a href='https://www.tcd.ie/news_events/top-stories/featured/ai-could-supercharge-human-collective-intelligence-in-everything-from-disaster-relief-to-medical-research/' target='_blank'>AI could supercharge human collective intelligence in everything from disaster relief to medical research</a></h3>
+            </div>
+            <p class="date">2025-03-05</p>
+            <p class="description">Research published in the journal Patterns argues that AI-enhanced collective intelligence is transforming approaches to large-scale crises, offering faster and more accurate insights in various fields.</p>
+            <p class="source">Source: Trinity College Dublin</p>
+        </div>
+
+        <div class="item" id="item-industry_news-24">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-24">
+                </div>
+                <h3><a href='https://www.youtube.com/watch?v=YWzqeEBkVCI' target='_blank'>Allison Duettmann and Beatrice Erkers: A Vision of Existential Hope for the New Year</a></h3>
+            </div>
+            <p class="date">2024-12-16</p>
+            <p class="description">Allison Duettmann and Beatrice Erkers discuss existential hope, longevity, neurotech, and positive futures in this special episode of the Existential Hope Podcast.</p>
+            <p class="source">Source: YouTube - Foresight Institute</p>
+        </div>
+
+        <div class="item" id="item-industry_news-25">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-25">
+                </div>
+                <h3><a href='https://shows.acast.com/the-foresight-institute-podcast/episodes/sam-rodriques-ai-for-scientific-progress' target='_blank'>Sam Rodriques | AI for Scientific Progress</a></h3>
+            </div>
+            <p class="date">2025-03-14</p>
+            <p class="description">Podcast episode featuring Sam Rodriques discussing AI for scientific progress, hosted by Allison Duettmann, President and CEO of Foresight Institute.</p>
+            <p class="source">Source: The Foresight Institute Podcast</p>
+        </div>
+
+        <div class="item" id="item-industry_news-26">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-26">
+                </div>
+                <h3><a href='https://cepr.org/research/programme-areas/political-economy' target='_blank'>CEPR Political Economy Symposium 2025</a></h3>
+            </div>
+            <p class="date">2025-03-14</p>
+            <p class="description">Upcoming symposium featuring Alessandra Casella, Professor of Economics and Political Science, to be held in Rome, Italy.</p>
+            <p class="source">Source: CEPR</p>
+        </div>
+
+        <div class="item" id="item-industry_news-27">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-27">
+                </div>
+                <h3><a href='https://calendar.mit.edu/event/community-listening-with-ai-masterclass-with-deb-roy-and-dimitra-dimitrakopoulou' target='_blank'>Community Listening with AI Masterclass with Deb Roy and Dimitra Dimitrakopoulou</a></h3>
+            </div>
+            <p class="date">2025-03-11</p>
+            <p class="description">Deb Roy and Dimitra Dimitrakopoulou will lead a masterclass on using AI for community listening, examining trust decline and strategies to rebuild connections between society and science.</p>
+            <p class="source">Source: MIT Calendar</p>
+        </div>
+
+        <div class="item" id="item-industry_news-28">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-28">
+                </div>
+                <h3><a href='https://econ.ip-paris.fr/event/dimitrios-xefteris-university-of-cyprus-information-aggregation-by-voting-and-costly-political-influence-2/' target='_blank'>Dimitrios Xefteris: Information Aggregation by Voting and Costly Political Influence</a></h3>
+            </div>
+            <p class="date">2025-03-24</p>
+            <p class="description">Dimitrios Xefteris from the University of Cyprus will lead a doctoral course on Information Aggregation by Voting and Costly Political Influence, running from March 24 to April 2, 2025.</p>
+            <p class="source">Source: IP Paris Economics Department</p>
+        </div>
+
+        <div class="item" id="item-industry_news-29">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-29">
+                </div>
+                <h3><a href='https://www.youtube.com/watch?v=ARW0ABPzwtY' target='_blank'>Juan Benet on Decentralizing the Internet</a></h3>
+            </div>
+            <p class="date">2025-03-08</p>
+            <p class="description">Juan Benet, Founder of Protocol Labs, discusses decentralized internet, IPFS, Filecoin, and the potential of AI and blockchain technology in various industries. He emphasizes the importance of proper governance structures for responsible use of these technologies.</p>
+            <p class="source">Source: YouTube</p>
+        </div>
+
+        <div class="item" id="item-industry_news-30">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-30">
+                </div>
+                <h3><a href='https://aleph.crecimiento.build' target='_blank'>Aleph March '25 Event</a></h3>
+            </div>
+            <p class="date">2025-03-01</p>
+            <p class="description">Crecimiento's Aleph March '25 event features tracks on Crypto, Startups, Crecimiento movement, Wellness, Culture, and an Unconference. The event includes community-led initiatives, startup guidance, and discussions on sustainable growth in Argentina.</p>
+            <p class="source">Source: Crecimiento</p>
+        </div>
+
+        <div class="item" id="item-industry_news-31">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-31">
+                </div>
+                <h3><a href='https://econ.msu.edu/News-Events/News/2024-news/2024-05-01-Eguia-CSS-Award' target='_blank'>Jon X. Eguia Receives 2024 Cross-Disciplinary Faculty Research Award</a></h3>
+            </div>
+            <p class="date">2024-05-03</p>
+            <p class="description">Jon X. Eguia, MSU Economics professor, received the 2024 Cross-Disciplinary Faculty Research Award for his work on redistricting. His research includes creating the Partisan Advantage Tracker and advising Michigan's redistricting commission.</p>
+            <p class="source">Source: MSU Economics</p>
+        </div>
+
+        <div class="item" id="item-industry_news-32">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-32">
+                </div>
+                <h3><a href='https://www.aacu.org/event/the-promise-of-pluralism-in-an-age-of-prejudice' target='_blank'>The Promise of Pluralism in an Age of Prejudice: Addressing Antisemitism and Islamophobia on College Campuses</a></h3>
+            </div>
+            <p class="date">2025-03-10</p>
+            <p class="description">Workshop at AAC&U event exploring how college professionals can address harmful prejudicial behaviors while promoting dialogue, learning, and healing on campuses.</p>
+            <p class="source">Source: Association of American Colleges & Universities</p>
+        </div>
+
+        <div class="item" id="item-industry_news-33">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-33">
+                </div>
+                <h3><a href='https://www.hks.harvard.edu/events/building-digital-democracy' target='_blank'>Building a Digital Democracy</a></h3>
+            </div>
+            <p class="date">2025-03-14</p>
+            <p class="description">Harvard Kennedy School panel exploring how technology is transforming political institutions, civil society, and culture to support more representative and participatory democracy.</p>
+            <p class="source">Source: Harvard Kennedy School</p>
+        </div>
+
+        <div class="item" id="item-industry_news-34">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-34">
+                </div>
+                <h3><a href='https://hai.stanford.edu' target='_blank'>Stanford HAI researchers create new AI benchmarks to reduce bias</a></h3>
+            </div>
+            <p class="date">2025-03-08</p>
+            <p class="description">Stanford HAI researchers developed eight new AI benchmarks to help developers reduce bias in AI models, potentially making them fairer and less likely to cause harm.</p>
+            <p class="source">Source: Stanford HAI</p>
+        </div>
+
+        <div class="item" id="item-industry_news-35">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-35">
+                </div>
+                <h3><a href='https://www.microsoft.com/en-us/research/group/plural-technology-collaboratory/news/ai-governance-initiative-2025/' target='_blank'>Microsoft Plural Technology Collaboratory Announces New Research Initiative on AI Governance</a></h3>
+            </div>
+            <p class="date">2025-03-10</p>
+            <p class="description">The Microsoft Plural Technology Collaboratory launched a new research project focused on developing decentralized governance models for AI systems. The initiative aims to explore how blockchain and other Web3 technologies can enhance democratic oversight of AI.</p>
+            <p class="source">Source: Microsoft Research</p>
+        </div>
+
+        <div class="item" id="item-industry_news-36">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-36">
+                </div>
+                <h3><a href='https://humancompatible.ai/research/papers/ai-alignment-techniques-2025' target='_blank'>UC Berkeley CHAI Releases White Paper on AI Alignment Techniques</a></h3>
+            </div>
+            <p class="date">2025-03-08</p>
+            <p class="description">The Center for Human-Compatible AI at UC Berkeley published a comprehensive white paper outlining novel techniques for aligning advanced AI systems with human values. The paper discusses recent breakthroughs in inverse reinforcement learning and value learning.</p>
+            <p class="source">Source: UC Berkeley CHAI</p>
+        </div>
+
+        <div class="item" id="item-industry_news-37">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-37">
+                </div>
+                <h3><a href='https://techpolicy.press/events/ai-electoral-integrity-webinar-2025' target='_blank'>Tech Policy Press Hosts Webinar on AI and Electoral Integrity</a></h3>
+            </div>
+            <p class="date">2025-03-20</p>
+            <p class="description">Tech Policy Press will host a webinar discussing the impact of AI on electoral integrity and democratic processes. Experts will explore challenges and potential safeguards as AI becomes more prevalent in political campaigns and information ecosystems.</p>
+            <p class="source">Source: Tech Policy Press</p>
+        </div>
+
+        <div class="item" id="item-industry_news-38">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-industry_news-38">
+                </div>
+                <h3><a href='https://gitcoin.co/grants/ai-public-good-2025' target='_blank'>Gitcoin Launches AI for Public Good Grant Round</a></h3>
+            </div>
+            <p class="date">2025-03-12</p>
+            <p class="description">Gitcoin announced a new grant round focused on funding open-source AI projects that benefit the public good. The initiative aims to support developers working on AI applications in areas such as education, healthcare, and environmental sustainability.</p>
+            <p class="source">Source: Gitcoin Blog</p>
+        </div>
+
+        <h2>Events</h2>
+        <p class="category-description">Upcoming conferences, events, workshops, talks, virtual events, panels, panel discussions, and meetups</p>
+
+        <div class="item" id="item-events-39">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-events-39">
+                </div>
+                <h3><a href='https://ci.acm.org/2025/' target='_blank'>ACM Collective Intelligence 2025</a></h3>
+            </div>
+            <p class="date">2025-08-04</p>
+            <p class="description">Conference bringing together researchers from various disciplines to discuss shared intelligence emerging from individuals working together, often aided by technology. The theme focuses on Diverse Intelligence.</p>
+            <p class="source">Source: ACM Collective Intelligence</p>
+        </div>
+
+        <div class="item" id="item-events-40">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-events-40">
+                </div>
+                <h3><a href='https://www.eventbrite.com/e/pacific-technology-policy-conference-2025-tickets-1205150661069' target='_blank'>Pacific Technology Policy Conference 2025</a></h3>
+            </div>
+            <p class="date">2025-03-13</p>
+            <p class="description">Full-day conference addressing critical tech policy issues impacting the Indo-Pacific. Features keynote remarks, panel discussions, and a networking reception with policy, academic, and private sector stakeholders.</p>
+            <p class="source">Source: Eventbrite</p>
+        </div>
+
+        <div class="item" id="item-events-41">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-events-41">
+                </div>
+                <h3><a href='https://www.peoplepowered.org/events-content/ai-and-digital-democracy-2025' target='_blank'>AI for Digital Democracy: How to navigate opportunities and threats</a></h3>
+            </div>
+            <p class="date">2025-02-18</p>
+            <p class="description">Webinar exploring how AI is shaping the future of participatory democracy, discussing key trends in AI-powered digital participation and best practices for designing impactful programs.</p>
+            <p class="source">Source: People Powered</p>
+        </div>
+
+        <div class="item" id="item-events-42">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-events-42">
+                </div>
+                <h3><a href='https://cynam.org/events/leadership-in-cyber/' target='_blank'>AI Ethics, Risks and Safety Conference 2025</a></h3>
+            </div>
+            <p class="date">2025-03-15</p>
+            <p class="description">Conference bringing together leading experts to discuss the challenges and opportunities of AI, exploring its use in critical industries, ethical implications, and resources for building safe and responsible AI.</p>
+            <p class="source">Source: CyNam</p>
+        </div>
+
+        <h2>Jobs</h2>
+        <p class="category-description">Job opportunities, fellowships, grants, research funding and positions</p>
+
+        <div class="item" id="item-jobs-43">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-43">
+                </div>
+                <h3><a href='https://www.prri.org/about/careers-and-fellowships/' target='_blank'>Research Internship - Summer 2025</a></h3>
+            </div>
+            <p class="date">2025-02-26</p>
+            <p class="description">PRRI seeks an undergraduate or graduate student for a paid summer 2025 research internship in Washington D.C. focusing on religion, politics, and policy issues. Applications due February 14, 2025.</p>
+            <p class="source">Source: Public Religion Research Institute (PRRI)</p>
+        </div>
+
+        <div class="item" id="item-jobs-44">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-44">
+                </div>
+                <h3><a href='https://www.h-net.org/jobs/job_display.php?id=65432' target='_blank'>Postdoctoral Fellowship in Japanese Studies</a></h3>
+            </div>
+            <p class="date">2025-03-03</p>
+            <p class="description">The University of Pittsburgh is offering a postdoctoral fellowship in Japanese Studies. The position involves research and teaching related to Japan.</p>
+            <p class="source">Source: H-Net Job Guide</p>
+        </div>
+
+        <div class="item" id="item-jobs-45">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-45">
+                </div>
+                <h3><a href='https://www.microsoft.com/en-us/research/careers/' target='_blank'>Senior Applied Scientist – Microsoft Ads</a></h3>
+            </div>
+            <p class="date">2025-03-11</p>
+            <p class="description">Microsoft Research is seeking a Senior Applied Scientist for their Ads team in Bangalore, India. The role focuses on artificial intelligence applications in advertising.</p>
+            <p class="source">Source: Microsoft Research Careers</p>
+        </div>
+
+        <div class="item" id="item-jobs-46">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-46">
+                </div>
+                <h3><a href='https://jooble.org/jobs-remote-researcher' target='_blank'>Postdoctoral Researcher / Fellow in Quantitative Research</a></h3>
+            </div>
+            <p class="date">2025-03-15</p>
+            <p class="description">A leading quantitative trading firm is seeking a Postdoctoral Researcher to join their team as a Quantitative Researcher, focusing on machine learning and data analysis.</p>
+            <p class="source">Source: Jooble</p>
+        </div>
+
+        <div class="item" id="item-jobs-47">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-47">
+                </div>
+                <h3><a href='https://www.plurality.institute/opportunities' target='_blank'>AISI Challenge Fund</a></h3>
+            </div>
+            <p class="date">2025-03-10</p>
+            <p class="description">AISI is supporting research tackling four critical AI security challenges. This funding opportunity aims to advance work on AI safety and security.</p>
+            <p class="source">Source: AISI</p>
+        </div>
+
+        <div class="item" id="item-jobs-48">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-48">
+                </div>
+                <h3><a href='https://www.plurality.institute/opportunities' target='_blank'>Internet Freedom Fund</a></h3>
+            </div>
+            <p class="date">2025-03-03</p>
+            <p class="description">Open Technology Fund is funding internet freedom projects at every stage of development from proof-of-concept to on-the-ground deployment.</p>
+            <p class="source">Source: Open Technology Fund</p>
+        </div>
+
+        <div class="item" id="item-jobs-49">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-49">
+                </div>
+                <h3><a href='https://www.plurality.institute/opportunities' target='_blank'>2025/26 Civic Media Fellowship Application</a></h3>
+            </div>
+            <p class="date">2025-03-03</p>
+            <p class="description">USC Annenberg Innovation Lab's Civic Media fellowship empowers artists, creators, storytellers & organizers to further hone their practice through 8 months of support.</p>
+            <p class="source">Source: USC Annenberg Innovation Lab</p>
+        </div>
+
+        <div class="item" id="item-jobs-50">
+            <div class="item-header">
+                <div class="item-checkbox">
+                    <input type="checkbox" data-id="item-jobs-50">
+                </div>
+                <h3><a href='https://www.plurality.institute/opportunities' target='_blank'>Call for submissions: Metascience and AI postdoctoral fellowship</a></h3>
+            </div>
+            <p class="date">2025-02-19</p>
+            <p class="description">Alfred P. Sloan Foundation postdoctoral fellowship program to support early career researchers in the social sciences interested in AI.</p>
+            <p class="source">Source: Alfred P. Sloan Foundation</p>
+        </div>
+
+    </div>
+</body>
+</html>

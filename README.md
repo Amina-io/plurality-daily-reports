@@ -57,7 +57,7 @@ You can customize the bot by modifying:
 
 This repository includes a GitHub Actions workflow file (`.github/workflows/daily-report.yml`) that:
 
-1. Runs the script daily at 7 AM UTC
+1. Runs the script daily at 6 AM PST
 2. Commits and pushes any changes to the report
 3. Can be triggered manually through the Actions tab
 
